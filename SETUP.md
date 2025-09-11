@@ -154,7 +154,7 @@ Also copy one of the private keys for `ADMIN_PRIVATE_KEY` in `.env`.
    - Copy a private key from the blockchain node terminal
    - In MetaMask: Account menu → Import Account → Paste private key
 
-### 6. Start the Application
+### 6. Start the Application                                                            
 
 ```bash
 npm run dev

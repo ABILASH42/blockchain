@@ -55,7 +55,7 @@ app.use('*', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-
+console.log(process.env)
 // Start server
 const startServer = async () => {
   try {
