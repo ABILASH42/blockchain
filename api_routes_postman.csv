@@ -1,0 +1,84 @@
+Name,Method,URL,Description,Authorization,Body
+Files - Serve Upload,GET,{{baseUrl}}/uploads/:filename,Stream raw file from server uploads directory for inline display.,None,Path param :filename
+Files - GridFS Image,GET,{{baseUrl}}/api/images/:filename,Serve stored image/file from MongoDB GridFS.,None,Path param :filename
+Files - Uploaded Document,GET,{{baseUrl}}/api/documents/:filename,Serve PDF document stored on disk with inline headers.,None,Path param :filename
+System - Health Check,GET,{{baseUrl}}/api/health,API health probe with timestamp and environment info.,None,
+System - API Root,GET,{{baseUrl}}/api,Basic metadata listing of main API groups.,None,
+Auth - Register User,POST,{{baseUrl}}/api/auth/register,Create a new user; admin role auto-applied for whitelisted emails.,None,"{""fullName"": ""Jane Doe"", ""email"": ""user@example.com"", ""password"": ""P@ssw0rd"", ""walletAddress"": ""0x0000"", ""role"": ""USER""}"
+Auth - Setup 2FA,POST,{{baseUrl}}/api/auth/2fa/setup,Generate shared secret and QR code for TOTP setup.,Bearer,
+Auth - Verify 2FA,POST,{{baseUrl}}/api/auth/2fa/verify,"Validate TOTP token + secret and enable 2FA, returning backup codes.",Bearer,"{""token"": ""123456"", ""secret"": ""BASE32SECRET""}"
+Auth - Disable 2FA,POST,{{baseUrl}}/api/auth/2fa/disable,Disable two-factor authentication after verifying token.,Bearer,"{""token"": ""123456""}"
+Auth - Login,POST,{{baseUrl}}/api/auth/login,Email or wallet/password login with lockout protections.,None,"{""email"": ""user@example.com"", ""walletAddress"": ""0x0000"", ""password"": ""P@ssw0rd""}"
+Auth - Current User,GET,{{baseUrl}}/api/auth/me,Fetch authenticated user profile and derived flags.,Bearer,
+Auth - Verify Wallet,POST,{{baseUrl}}/api/auth/verify-wallet,Demo wallet signature verification to issue JWT.,None,"{""walletAddress"": ""0x0000"", ""signature"": ""signedMessage"", ""message"": ""string""}"
+Auth - Refresh Token,POST,{{baseUrl}}/api/auth/refresh-token,Issue a fresh JWT if the existing session is active.,Bearer,
+Auth - Logout,POST,{{baseUrl}}/api/auth/logout,Log out (stateless) for audit purposes.,Bearer,
+Users - Submit Verification Docs,POST,{{baseUrl}}/api/users/verification/submit,Upload Aadhaar/PAN/DL/Passport documents for verification (multipart).,Bearer,"Multipart fields: aadhaarCard, panCard, drivingLicense, passport + numbers"
+Users - Pending Verifications,GET,{{baseUrl}}/api/users/verification/pending,List users awaiting manual verification review (admin only).,Admin Bearer,"Query: page, limit"
+Users - Verify User,PUT,{{baseUrl}}/api/users/verification/:userId/verify,Admin approve or reject a user and mark verified documents.,Admin Bearer,"{""status"": ""VERIFIED"", ""rejectionReason"": """", ""verifiedDocuments"": {""aadhaarCard"": true}}"
+Users - List Verified,GET,{{baseUrl}}/api/users/verified,Fetch all verified citizen accounts.,Admin Bearer,
+Users - Get Profile,GET,{{baseUrl}}/api/users/profile,Return detailed profile for the authenticated user.,Bearer,
+Users - Update Profile,PUT,{{baseUrl}}/api/users/profile,"Update name, phone, and address information.",Bearer,"{""fullName"": """", ""phoneNumber"": """", ""address"": {""line1"": """", ""city"": """", ""state"": """", ""pincode"": """"}}"
+Users - Statistics,GET,{{baseUrl}}/api/users/statistics,Admin overview of total/pending/verified/rejected users.,Admin Bearer,
+Users - Verify User Debug,POST,{{baseUrl}}/api/users/verify-user,Admin helper to fetch and validate user ID inputs.,Admin Bearer,"{""userId"": ""ObjectId""}"
+Users - Get User By ID,GET,{{baseUrl}}/api/users/verify/:id,Fetch raw user record by path/userId (debug).,None,Path param :id
+Users - Toggle Liked Land,POST,{{baseUrl}}/api/users/liked-lands/:landId,Add or remove a land from favorites and return like count.,Bearer,Path param :landId
+Users - Get Liked Lands,GET,{{baseUrl}}/api/users/liked-lands,Paginated list of liked lands that are currently for sale.,Bearer,"Query: page, limit"
+Users - My Listings,GET,{{baseUrl}}/api/users/my-listings,Retrieve lands owned by the user that are listed for sale.,Bearer,"Query: page, limit"
+Lands - Add Land Record,POST,{{baseUrl}}/api/lands/add,Admin adds cadastral land data with optional original document upload.,Admin Bearer,"Multipart: document + JSON fields surveyNumber,village,taluka,district,state,pincode,landType,ownerId..."
+Lands - Digitalize Document,POST,{{baseUrl}}/api/lands/digitalize,Generate QR-backed certificate and upload to IPFS for a land.,Admin Bearer,"{""landId"": ""ObjectId""}"
+Lands - Admin Listing,GET,{{baseUrl}}/api/lands,"Admin filterable list of lands (location, price, status).",Admin Bearer,"Query: page, limit, district, state, landType, isForSale, assetId, verificationStatus, minPrice, maxPrice, minArea, maxArea, sortBy, sortOrder"
+Lands - Get By DB ID,GET,{{baseUrl}}/api/lands/land/:id,Fetch land with populated owner/digitalization metadata.,None,Path param :id
+Lands - Search By AssetId,GET,{{baseUrl}}/api/lands/search/:assetId,Find a land using its public assetId.,None,Path param :assetId
+Lands - Claim Ownership,POST,{{baseUrl}}/api/lands/:landId/claim,"Verified user claims an unowned, verified land.",Bearer,Path param :landId
+Lands - List For Sale,POST,{{baseUrl}}/api/lands/:landId/list-for-sale,"Owner lists land for sale with price, description, features, and images.",Bearer,"Multipart images + fields: askingPrice, description, features[], nearbyAmenities[]"
+Lands - Update Listing (Multipart),POST,{{baseUrl}}/api/lands/:landId/update-listing,Owner updates listing details and image gallery.,Bearer,"Multipart images + fields: askingPrice, description, features, nearbyAmenities, existingImages[]"
+Lands - My Lands,GET,{{baseUrl}}/api/lands/my-lands,Paginated lands currently owned by caller with filters.,Bearer,"Query: page, limit, status, isForSale, sortBy, sortOrder"
+Lands - Marketplace,GET,{{baseUrl}}/api/lands/marketplace,"Public marketplace of lands for sale, includes like counts.",Optional Bearer,"Query: page, limit, minPrice, maxPrice, district, state, landType, minArea, maxArea, sortBy, sortOrder"
+Lands - Legacy For Sale,GET,{{baseUrl}}/api/lands/for-sale,Legacy listing endpoint backed by Land.findForSale().,None,"Query: page, limit, minPrice, maxPrice, district, state, landType, minArea, maxArea, sortBy, sortOrder"
+Lands - Nearby Search,GET,{{baseUrl}}/api/lands/nearby,Geo search for lands within maxDistance meters of lat/lng.,None,"Query: latitude, longitude, maxDistance"
+Lands - Verify QR Asset,GET,{{baseUrl}}/api/lands/verify/:assetId,Return verification payload for QR/assetId scans.,None,Path param :assetId
+Lands - Download Certificate,GET,{{baseUrl}}/api/lands/:landId/certificate,Download digital ownership certificate PDF from IPFS.,None,Path param :landId
+Lands - Download Original Document (Public),GET,{{baseUrl}}/api/lands/:landId/original-document,Download original uploaded deed from IPFS.,None,Path param :landId
+Lands - Document Status,GET,{{baseUrl}}/api/lands/:landId/document-status,Check whether original/digital documents exist on IPFS.,None,Path param :landId
+Lands - Owned By User,GET,{{baseUrl}}/api/lands/owned-by/:userId,Admin or self lookup of lands owned by a specific user.,Bearer,"Path param :userId; Query: page, limit"
+Lands - Edit Listing,PUT,{{baseUrl}}/api/lands/:landId/edit-listing,"Owner-only JSON update of listing info (price, description, features).",Bearer,"{""askingPrice"": 0, ""description"": """", ""features"": [""""], ""nearbyAmenities"": [""""], ""virtualTourUrl"": """"}"
+Lands - Remove Listing,DELETE,{{baseUrl}}/api/lands/:landId/remove-listing,Owner removes listing and sets land back to available.,Bearer,Path param :landId
+Lands - Land Details,GET,{{baseUrl}}/api/lands/:landId/details,Detailed land view with owner and verification info.,None,Path param :landId
+Lands - Download Certificate (Owner Fallback),GET,{{baseUrl}}/api/lands/:landId/download-document,Owner downloads certificate from local uploads directory.,Bearer,Path param :landId
+Lands - Download Original (Owner Fallback),GET,{{baseUrl}}/api/lands/:landId/download-original-document,Owner downloads original document from local uploads directory.,Bearer,Path param :landId
+Transactions - Initiate Purchase,POST,{{baseUrl}}/api/land-transactions/purchase,Buyer initiates purchase against a land listing (locks land).,Bearer,"{""landId"": ""ObjectId"", ""offerPrice"": 0, ""chatId"": ""ObjectId""}"
+Transactions - Upload Documents,POST,{{baseUrl}}/api/land-transactions/:transactionId/documents,Buyer or seller uploads up to 5 supporting documents (multipart).,Bearer,Multipart files[] named documents; path param :transactionId
+Transactions - Pending Review,GET,{{baseUrl}}/api/land-transactions/pending-review,Admin queue of transactions waiting for review.,Admin Bearer,
+Transactions - Review,PUT,{{baseUrl}}/api/land-transactions/:transactionId/review,Admin with 2FA approves or rejects a transaction.,Admin Bearer + 2FA,"{""action"": ""approve"", ""comments"": """", ""rejectionReason"": """"}"
+Transactions - My Transactions,GET,{{baseUrl}}/api/land-transactions/my-transactions,List all transactions where the user is buyer or seller.,Bearer,
+Transactions - Get By ID,GET,{{baseUrl}}/api/land-transactions/:transactionId,Fetch transaction details (buyer/seller/admin/auditor).,Bearer,Path param :transactionId
+Transactions - Verify Certificate,GET,{{baseUrl}}/api/land-transactions/verify/:transactionId,Public verification of a completed transaction and certificates.,None,Path param :transactionId
+Transactions - Land History,GET,{{baseUrl}}/api/land-transactions/land/:landId/history,Full transaction history for a given land.,None,Path param :landId
+Chat - Start Conversation,POST,{{baseUrl}}/api/chats/start,Buyer opens chat with seller for a land listing.,Bearer,"{""landId"": ""ObjectId""}"
+Chat - My Chats,GET,{{baseUrl}}/api/chats/my-chats,List chats where caller is buyer or seller.,Bearer,
+Chat - Get Chat,GET,{{baseUrl}}/api/chats/:chatId,Fetch chat thread; marks other-party messages as read.,Bearer,Path param :chatId
+Chat - Send Message,POST,{{baseUrl}}/api/chats/:chatId/message,Send text/offer/counter/acceptance messages inside a chat.,Bearer,"{""message"": ""Hi"", ""messageType"": ""TEXT"", ""offerAmount"": 0}"
+Chat - Make Offer,POST,{{baseUrl}}/api/chats/:chatId/offer,Buyer convenience endpoint to send price offer message.,Bearer,"{""offerAmount"": 0}"
+Chat - Counter Offer,POST,{{baseUrl}}/api/chats/:chatId/counter-offer,Seller counter-offer message with amount.,Bearer,"{""counterAmount"": 0}"
+Chat - Accept Offer,POST,{{baseUrl}}/api/chats/:chatId/accept,Accept the currently pending offer and mark chat as deal agreed.,Bearer,Path param :chatId
+Audit - Logs,GET,{{baseUrl}}/api/audit/logs,Auditor filtered audit log list with pagination.,Auditor Bearer,"Query: startDate, endDate, action, performedBy, targetResource, page, limit"
+Audit - Statistics,GET,{{baseUrl}}/api/audit/statistics,"Auditor KPIs for users, lands, and transactions in date range.",Auditor Bearer,"Query: startDate, endDate"
+Audit - Export Report,GET,{{baseUrl}}/api/audit/export,Generate PDF audit report for selected date range.,Auditor Bearer,"Query: startDate, endDate"
+Audit - Recent Activity,GET,{{baseUrl}}/api/audit/activity,Latest activity feed limited by query parameter.,Auditor Bearer,Query: limit
+2FA - Setup,POST,{{baseUrl}}/api/2fa/setup,Protected endpoint to start TOTP setup via controller.,Bearer,
+2FA - Verify,POST,{{baseUrl}}/api/2fa/verify,Validate TOTP token and enable 2FA using controller.,Bearer,"{""token"": ""123456""}"
+2FA - Disable,POST,{{baseUrl}}/api/2fa/disable,Disable 2FA after verifying token via controller endpoint.,Bearer,"{""token"": ""123456""}"
+2FA - Status,GET,{{baseUrl}}/api/2fa/status,Check whether user has 2FA enabled and backup codes available.,Bearer,
+Buy Request - Create,POST,{{baseUrl}}/api/buy-requests,Buyer creates a buy request tied to chat and agreed price; seller must have 2FA.,Bearer,"{""chatId"": ""ObjectId"", ""landId"": ""ObjectId"", ""sellerId"": ""ObjectId"", ""buyerId"": ""ObjectId"", ""agreedPrice"": 0}"
+Buy Request - Get By Chat,GET,{{baseUrl}}/api/buy-requests/:chatId,Buyer or seller fetches buy request details for a chat.,Bearer,Path param :chatId
+Buy Request - Seller Confirm,POST,{{baseUrl}}/api/buy-requests/:chatId/confirm,Seller confirms buy request using TOTP code.,Bearer,"{""twoFactorCode"": ""123456""}"
+Buy Request - Resend 2FA,POST,{{baseUrl}}/api/buy-requests/:chatId/resend-2fa,Seller regenerates buy-request-specific 2FA code (dev mode returns code).,Bearer,Path param :chatId
+Buy Request - My Requests,GET,{{baseUrl}}/api/buy-requests/user/my-requests,List all buy requests involving the authenticated user.,Bearer,
+Buy Request - Cancel,POST,{{baseUrl}}/api/buy-requests/:chatId/cancel,"Buyer or seller cancels a buy request, optionally with reason.",Bearer,"{""reason"": ""string""}"
+Admin Tx - Pending Queue,GET,{{baseUrl}}/api/admin/transactions/pending,Admin view of buy requests waiting for approval.,Admin Bearer,
+Admin Tx - Transaction Details,GET,{{baseUrl}}/api/admin/transactions/:transactionId,Admin fetches full details for a buy request pending approval.,Admin Bearer,Path param :transactionId
+Admin Tx - Approve,POST,{{baseUrl}}/api/admin/transactions/:transactionId/approve,"Admin approves buy request, triggers land transfer + optional blockchain hash.",Admin Bearer,"{""comments"": """", ""blockchainTxHash"": ""0x0000""}"
+Admin Tx - Reject,POST,{{baseUrl}}/api/admin/transactions/:transactionId/reject,Admin rejects buy request with mandatory reason.,Admin Bearer,"{""reason"": ""string""}"
+Admin Tx - All Transactions,GET,{{baseUrl}}/api/admin/transactions,Paginated view of all buy requests with optional status filter.,Admin Bearer,"Query: status, page, limit"
+Admin Tx - Stats Overview,GET,{{baseUrl}}/api/admin/transactions/stats/overview,Aggregate counts and total agreed value grouped by status.,Admin Bearer,
