@@ -71,7 +71,7 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <div className="min-h-screen bg-gray-50">
+      <div className="app-shell-inner app-shell">
         <AppContent />
       </div>
     </AuthProvider>

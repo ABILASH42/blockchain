@@ -489,7 +489,7 @@ class ApiService {
 
   // ==================== 2FA ====================
   async setupTwoFactor() {
-    return this.request('/auth/2fa/setup', { method: 'POST' });
+    return this.request('/2fa/setup', { method: 'POST' });
   }
 
   async verifyTwoFactor(data: { token: string }) {
@@ -505,7 +505,7 @@ class ApiService {
   }
 
   async disableTwoFactor(data: any) {
-    return this.request('/auth/2fa/disable', {
+    return this.request('/2fa/disable', {
       method: 'POST',
       body: JSON.stringify(data),
     });

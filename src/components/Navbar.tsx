@@ -46,17 +46,22 @@ const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
   };
 
   return (
-    <nav className="bg-white shadow-lg border-b border-gray-200">
+    <nav className="glass-nav">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center">
-              <div className="h-10 w-10 bg-blue-600 rounded-lg flex items-center justify-center">
+              <div className="h-10 w-10 bg-gradient-to-br from-blue-600 to-indigo-500 rounded-xl flex items-center justify-center shadow-md">
                 <Home className="h-6 w-6 text-white" />
               </div>
-              <span className="ml-3 text-xl font-bold text-gray-900">
-                Land Registry
-              </span>
+              <div className="ml-3">
+                <span className="text-xl font-bold text-gray-900 leading-tight">
+                  Land Registry
+                </span>
+                <p className="text-xs text-gray-500 leading-tight">
+                  Blockchain-powered property platform
+                </p>
+              </div>
               {auth.user?.role === 'ADMIN' && (
                 <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
                   ADMIN
@@ -95,7 +100,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                 {auth.user?.fullName}
               </p>
               <div className="flex items-center justify-end space-x-2">
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-500 capitalize">
                   {auth.user?.role === 'ADMIN' ? 'Administrator' : 'User'}
                 </p>
                 {auth.user?.verificationStatus === 'VERIFIED' && (

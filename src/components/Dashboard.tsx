@@ -484,11 +484,13 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigateToLand, initialTab, ini
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-transparent">
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        {renderContent()}
+      <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <div className="glass-card rounded-2xl p-6 sm:p-8 shadow-xl animate-fadeIn">
+          {renderContent()}
+        </div>
       </main>
 
       {showQRScanner && (

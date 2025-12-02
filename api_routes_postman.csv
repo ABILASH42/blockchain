@@ -5,9 +5,6 @@ Files - Uploaded Document,GET,{{baseUrl}}/api/documents/:filename,Serve PDF docu
 System - Health Check,GET,{{baseUrl}}/api/health,API health probe with timestamp and environment info.,None,
 System - API Root,GET,{{baseUrl}}/api,Basic metadata listing of main API groups.,None,
 Auth - Register User,POST,{{baseUrl}}/api/auth/register,Create a new user; admin role auto-applied for whitelisted emails.,None,"{""fullName"": ""Jane Doe"", ""email"": ""user@example.com"", ""password"": ""P@ssw0rd"", ""walletAddress"": ""0x0000"", ""role"": ""USER""}"
-Auth - Setup 2FA,POST,{{baseUrl}}/api/auth/2fa/setup,Generate shared secret and QR code for TOTP setup.,Bearer,
-Auth - Verify 2FA,POST,{{baseUrl}}/api/auth/2fa/verify,"Validate TOTP token + secret and enable 2FA, returning backup codes.",Bearer,"{""token"": ""123456"", ""secret"": ""BASE32SECRET""}"
-Auth - Disable 2FA,POST,{{baseUrl}}/api/auth/2fa/disable,Disable two-factor authentication after verifying token.,Bearer,"{""token"": ""123456""}"
 Auth - Login,POST,{{baseUrl}}/api/auth/login,Email or wallet/password login with lockout protections.,None,"{""email"": ""user@example.com"", ""walletAddress"": ""0x0000"", ""password"": ""P@ssw0rd""}"
 Auth - Current User,GET,{{baseUrl}}/api/auth/me,Fetch authenticated user profile and derived flags.,Bearer,
 Auth - Verify Wallet,POST,{{baseUrl}}/api/auth/verify-wallet,Demo wallet signature verification to issue JWT.,None,"{""walletAddress"": ""0x0000"", ""signature"": ""signedMessage"", ""message"": ""string""}"

@@ -1,0 +1,102 @@
+API Reference (use {{baseUrl}} = e.g. http://localhost:5000/api)
+
+AUTH (/auth)
+- POST /auth/register | none | create user | { fullName, email, password, walletAddress? }
+- POST /auth/login | none | email or wallet login | { email?, walletAddress?, password }
+- POST /auth/verify-wallet | none | demo wallet verification | { walletAddress, signature, message }
+- GET /auth/me | Bearer | current user profile
+- POST /auth/refresh-token | Bearer | new JWT
+- POST /auth/logout | Bearer | logout (audit only)
+
+USERS (/users)
+- POST /users/verification/submit | Bearer | upload KYC docs (multipart)
+- GET /users/verification/pending | Admin | list pending verifications | query page, limit
+- PUT /users/verification/:userId/verify | Admin | approve/reject user | { status, rejectionReason?, verifiedDocuments? }
+- GET /users/verified | Admin | list verified users
+- GET /users/profile | Bearer | self profile
+- PUT /users/profile | Bearer | update profile | { fullName?, phoneNumber?, address? }
+- GET /users/statistics | Admin | user statistics
+- POST /users/verify-user | Admin | debug lookup | { userId }
+- GET /users/verify/:id | none | fetch user (diagnostic)
+- POST /users/liked-lands/:landId | Bearer | toggle favorite
+- GET /users/liked-lands | Bearer | liked lands | query page, limit
+- GET /users/my-listings | Bearer | user’s listings | query page, limit
+
+LANDS (/lands)
+- POST /lands/add | Admin + multipart | add land + document
+- POST /lands/digitalize | Admin | generate QR + certificate | { landId }
+- GET /lands | Admin | filtered list | query filters (page, limit, district, etc.)
+- GET /lands/land/:id | none | land by Mongo ID
+- GET /lands/search/:assetId | none | find by assetId
+- POST /lands/:landId/claim | Bearer | claim unowned land
+- POST /lands/:landId/list-for-sale | Bearer + multipart | list land (images + info)
+- PUT /lands/:landId/update-listing | Bearer + multipart | update listing/images
+- GET /lands/my-lands | Bearer | caller’s lands | query page, limit, status
+- GET /lands/marketplace | optional Bearer | public sale list (likes)
+- GET /lands/for-sale | none | legacy sale endpoint
+- GET /lands/nearby | none | geo search | query latitude, longitude, maxDistance
+- GET /lands/verify/:assetId | none | QR verification payload
+- GET /lands/:landId/certificate | none | download certificate (IPFS)
+- GET /lands/:landId/original-document | none | download original doc (IPFS)
+- GET /lands/:landId/document-status | none | check IPFS availability
+- GET /lands/owned-by/:userId | Bearer | lands owned by user | query page, limit
+- PUT /lands/:landId/edit-listing | Bearer | JSON update listing | { askingPrice?, description?, features?, nearbyAmenities?, virtualTourUrl? }
+- DELETE /lands/:landId/remove-listing | Bearer | remove listing
+- GET /lands/:landId/details | none | detailed land info
+- GET /lands/:landId/download-document | Bearer owner | certificate from local uploads
+- GET /lands/:landId/download-original-document | Bearer owner | original doc from local uploads
+
+CHATS (/chats)
+- POST /chats/start | Bearer | start chat | { landId }
+- GET /chats/my-chats | Bearer | user’s chats
+- GET /chats/:chatId | Bearer | fetch chat thread
+- POST /chats/:chatId/message | Bearer | send message/offer | { message, messageType?, offerAmount? }
+- POST /chats/:chatId/offer | Bearer (buyer) | make offer | { offerAmount }
+- POST /chats/:chatId/counter-offer | Bearer (seller) | counter offer | { counterAmount }
+- POST /chats/:chatId/accept | Bearer | accept offer
+
+BUY REQUESTS (/buy-requests)
+- POST /buy-requests | Bearer | create request | { chatId, landId, sellerId, buyerId, agreedPrice }
+- GET /buy-requests/:chatId | Bearer | fetch request
+- POST /buy-requests/:chatId/confirm | Bearer (seller) | confirm via 2FA | { twoFactorCode }
+- POST /buy-requests/:chatId/resend-2fa | Bearer (seller) | regenerate code
+- GET /buy-requests/user/my-requests | Bearer | list requests involving user
+- POST /buy-requests/:chatId/cancel | Bearer | cancel request | { reason? }
+
+LAND TRANSACTIONS (/land-transactions)
+- POST /land-transactions/purchase | Bearer | initiate purchase | { landId, offerPrice, chatId? }
+- POST /land-transactions/:transactionId/documents | Bearer + multipart | upload docs
+- GET /land-transactions/pending-review | Admin | pending reviews
+- PUT /land-transactions/:transactionId/review | Admin + 2FA | approve/reject | { action, comments?, rejectionReason? }
+- GET /land-transactions/my-transactions | Bearer | user’s transactions
+- GET /land-transactions/:transactionId | Bearer | transaction details
+- GET /land-transactions/verify/:transactionId | none | public verification data
+- GET /land-transactions/land/:landId/history | none | land transaction history
+
+ADMIN TRANSACTIONS (/admin/transactions)
+- GET /admin/transactions/pending | Admin | pending buy requests
+- GET /admin/transactions/:transactionId | Admin | detailed request
+- POST /admin/transactions/:transactionId/approve | Admin | approve | { comments?, blockchainTxHash? }
+- POST /admin/transactions/:transactionId/reject | Admin | reject | { reason }
+- GET /admin/transactions | Admin | paginated view | query status, page, limit
+- GET /admin/transactions/stats/overview | Admin | aggregate stats
+
+2FA CONTROLLER (/2fa)
+- POST /2fa/setup | Bearer | start TOTP setup
+- POST /2fa/verify | Bearer | validate token & enable 2FA | { token }
+- POST /2fa/disable | Bearer | disable 2FA | { token }
+- GET /2fa/status | Bearer | check 2FA/backup codes
+
+AUDIT (/audit)
+- GET /audit/logs | Auditor | filtered logs | query startDate, endDate, action, performedBy, targetResource, page, limit
+- GET /audit/statistics | Auditor | KPIs | query startDate, endDate
+- GET /audit/export | Auditor | PDF report | query startDate, endDate
+- GET /audit/activity | Auditor | recent activity | query limit
+
+MISC
+- GET /uploads/:filename | serve local file
+- GET /api/images/:filename | serve GridFS file
+- GET /api/documents/:filename | serve PDF
+- GET /api/health | system health
+- GET /api | basic endpoint listing
+

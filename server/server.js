@@ -215,7 +215,6 @@ app.get("/api", (req, res) => {
     endpoints: {
       auth: "/api/auth",
       users: "/api/users",
-      digitizedLands: "/api/digitized-lands",
       landTransactions: "/api/land-transactions",
       chats: "/api/chats",
       health: "/api/health",
@@ -265,7 +264,6 @@ app.use("*", (req, res) => {
       "/api/auth",
       "/api/users",
       "/api/lands",
-      "/api/digitized-lands",
       "/api/land-transactions",
       "/api/chats",
       "/api/buy-requests",

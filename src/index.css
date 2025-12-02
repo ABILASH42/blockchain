@@ -7,9 +7,9 @@
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     line-height: 1.5;
   }
-  
+
   body {
-    @apply text-gray-900 antialiased;
+    @apply text-gray-900 antialiased bg-gradient-to-br from-sky-50 via-white to-indigo-50;
   }
 }
 
@@ -19,6 +19,33 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+  }
+
+  /* App shell & layout */
+  .app-shell {
+    @apply min-h-screen bg-gradient-to-br from-sky-50 via-white to-indigo-50;
+  }
+
+  .app-shell-inner {
+    @apply min-h-screen;
+  }
+
+  /* Glassmorphism-inspired surfaces */
+  .glass-nav {
+    @apply bg-white/80 backdrop-blur-xl border-b border-white/70 shadow-md;
+  }
+
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-xl border border-white/70 shadow-lg;
+  }
+
+  /* Section headings */
+  .section-title {
+    @apply text-2xl sm:text-3xl font-bold tracking-tight text-slate-900;
+  }
+
+  .section-subtitle {
+    @apply text-sm sm:text-base text-slate-500;
   }
 }
 
