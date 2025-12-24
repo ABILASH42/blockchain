@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import LandDetailPage from './components/LandDetailPage';
+import Home from './pages/Home';
+import About from './pages/About';
+import Contact from './pages/Contact';
 
 function AppContent() {
   const { auth } = useAuth();
@@ -19,12 +23,12 @@ function AppContent() {
     );
   }
 
-  // Show login page if user is not authenticated
+  // Redirect unauthenticated users to the login route
   if (!auth.isAuthenticated || !auth.user) {
-    return <Login />;
+    return <Navigate to="/login" replace />;
   }
 
-  // Handle navigation
+  // Handle navigation once authenticated
   const navigateToLandDetails = (id: string) => {
     setLandId(id);
     setCurrentPage('land-details');
@@ -68,12 +72,39 @@ function AppContent() {
   />;
 }
 
+const LoginRoute: React.FC = () => {
+  const { auth } = useAuth();
+
+  if (auth.loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  if (auth.isAuthenticated && auth.user) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <Login />;
+};
+
 function App() {
   return (
     <AuthProvider>
-      <div className="app-shell-inner app-shell">
-        <AppContent />
-      </div>
+      <BrowserRouter>
+        <div className="app-shell-inner app-shell">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/login" element={<LoginRoute />} />
+            <Route path="/dashboard" element={<AppContent />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
     </AuthProvider>
   );
 }

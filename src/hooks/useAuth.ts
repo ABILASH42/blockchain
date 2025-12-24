@@ -60,12 +60,35 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const connectWallet = async () => {
     try {
-      if (typeof window !== 'undefined' && window.ethereum) {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      if (typeof window !== 'undefined' && (window as any).ethereum) {
+        const ethereum = (window as any).ethereum;
+
+        // 1) Ask MetaMask for accounts
+        const accounts: string[] = await ethereum.request({
+          method: 'eth_requestAccounts',
+        });
+
+        if (!accounts || accounts.length === 0) {
+          throw new Error('No wallet accounts found. Please unlock MetaMask and try again.');
+        }
+
         const walletAddress = accounts[0];
-        
-        // Try to verify wallet with backend
-        const response = await apiService.verifyWallet({ walletAddress });
+
+        // 2) Prepare a simple login message and sign it with the wallet
+        const message = `Login to Land Registry at ${new Date().toISOString()}`;
+
+        const signature: string = await ethereum.request({
+          method: 'personal_sign',
+          params: [message, walletAddress],
+        });
+
+        // 3) Verify wallet + signature with backend
+        const response = await apiService.verifyWallet({
+          walletAddress,
+          signature,
+          message,
+        });
+
         const { token: newToken, user: userData } = response;
         localStorage.setItem('token', newToken);
         setToken(newToken);
