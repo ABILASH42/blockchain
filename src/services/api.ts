@@ -49,6 +49,20 @@ class ApiService {
     });
   }
 
+  async sendRegistrationOTP(email: string, fullName: string) {
+    return this.request('/auth/send-registration-otp', {
+      method: 'POST',
+      body: JSON.stringify({ email, fullName }),
+    });
+  }
+
+  async verifyAndRegister(userData: any) {
+    return this.request('/auth/verify-and-register', {
+      method: 'POST',
+      body: JSON.stringify(userData),
+    });
+  }
+
   async login(credentials: any) {
     return this.request('/auth/login', {
       method: 'POST',

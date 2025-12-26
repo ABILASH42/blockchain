@@ -159,6 +159,13 @@ const userSchema = new mongoose.Schema(
       },
     ],
 
+    // Email verification
+    emailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    emailVerifiedAt: Date,
+
     // Account security
     isActive: { type: Boolean, default: true },
     lastLogin: Date,

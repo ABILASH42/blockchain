@@ -63,6 +63,10 @@ const initializeServices = async () => {
     initGridFS();
     console.log("✅ GridFS service initialized");
 
+    // Verify email service configuration
+    const { verifyEmailConfig } = require("./utils/emailService");
+    await verifyEmailConfig();
+
     console.log("✅ All services initialized successfully");
   } catch (error) {
     console.error("❌ Service initialization failed:", error);

@@ -3,8 +3,195 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const AuditLog = require("../models/AuditLog");
 const { auth } = require("../middleware/auth");
+const { createAndSendOTP, verifyOTP } = require("../utils/otpService");
 
 const router = express.Router();
+
+// Send OTP for registration
+router.post("/send-registration-otp", async (req, res) => {
+  try {
+    const { email, fullName } = req.body;
+
+    // Validate email
+    if (!email) {
+      return res.status(400).json({
+        ok: false,
+        error: "Email is required",
+      });
+    }
+
+    // Check if user already exists
+    const existingUser = await User.findByEmail(email);
+    if (existingUser) {
+      return res.status(400).json({
+        ok: false,
+        error: "An account with this email already exists",
+      });
+    }
+
+    // Create and send OTP
+    const result = await createAndSendOTP(
+      email,
+      fullName || "User",
+      "REGISTRATION"
+    );
+
+    res.json({
+      ok: true,
+      message: "Verification code sent to your email",
+      expiresIn: 300, // 5 minutes in seconds
+    });
+  } catch (error) {
+    console.error("Send OTP error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Failed to send verification code. Please try again.",
+    });
+  }
+});
+
+// Verify OTP and register user
+router.post("/verify-and-register", async (req, res) => {
+  try {
+    const { fullName, email, password, walletAddress, otp } = req.body;
+
+    // Validate required fields
+    if (!fullName || !email || !password || !otp) {
+      return res.status(400).json({
+        ok: false,
+        error: "Full name, email, password, and OTP are required",
+      });
+    }
+
+    // Verify OTP
+    const otpResult = await verifyOTP(email, otp);
+    if (!otpResult.success) {
+      return res.status(400).json({
+        ok: false,
+        error: otpResult.error,
+      });
+    }
+
+    // Check if user already exists (double-check)
+    const existingUser = await User.findByEmail(email);
+    if (existingUser) {
+      return res.status(400).json({
+        ok: false,
+        error: "User already exists with this email address",
+      });
+    }
+
+    // Check wallet address if provided
+    if (walletAddress) {
+      const existingWallet = await User.findOne({ walletAddress });
+      if (existingWallet) {
+        return res.status(400).json({
+          ok: false,
+          error: "User already exists with this wallet address",
+        });
+      }
+    }
+
+    // Determine user role
+    const adminEmails = [
+      "admin@landregistry.gov",
+      "officer@landregistry.gov",
+      "superadmin@landregistry.gov",
+      "auditor@landregistry.gov",
+    ];
+
+    let userRole = "USER";
+    if (email.toLowerCase() === "auditor@landregistry.gov") {
+      userRole = "AUDITOR";
+    } else if (adminEmails.includes(email.toLowerCase())) {
+      userRole = "ADMIN";
+    }
+
+    // Create new user
+    const userData = {
+      fullName: fullName.trim(),
+      email: email.toLowerCase().trim(),
+      password,
+      role: userRole,
+      emailVerified: true,
+      emailVerifiedAt: new Date(),
+    };
+
+    // Add wallet address if provided
+    if (walletAddress) {
+      userData.walletAddress = walletAddress.trim();
+    }
+
+    const user = new User(userData);
+    await user.save();
+
+    // Log registration
+    await AuditLog.logAction(
+      "USER_REGISTER",
+      user._id,
+      "USER",
+      user._id.toString(),
+      { email: user.email, role: user.role, emailVerified: true },
+      req
+    );
+
+    // Generate JWT token
+    const token = jwt.sign(
+      {
+        id: user._id,
+        role: user.role,
+        email: user.email,
+      },
+      process.env.JWT_SECRET || "fallback-secret-key-for-development",
+      { expiresIn: "24h" }
+    );
+
+    console.log(`New user registered with verified email: ${user.email} (${user.role})`);
+
+    res.status(201).json({
+      success: true,
+      ok: true,
+      message: "Account created successfully",
+      token,
+      user: {
+        id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        walletAddress: user.walletAddress,
+        role: user.role,
+        verificationStatus: user.verificationStatus,
+        isVerified: user.verificationStatus === "VERIFIED",
+        emailVerified: user.emailVerified,
+        twoFactorEnabled: user.twoFactorEnabled,
+      },
+    });
+  } catch (error) {
+    console.error("Registration error:", error);
+
+    if (error.code === 11000) {
+      const field = Object.keys(error.keyPattern)[0];
+      const fieldName = field === "walletAddress" ? "wallet address" : field;
+      return res.status(400).json({
+        ok: false,
+        error: `User already exists with this ${fieldName}`,
+      });
+    }
+
+    if (error.name === "ValidationError") {
+      const messages = Object.values(error.errors).map((err) => err.message);
+      return res.status(400).json({
+        ok: false,
+        error: messages.join(", "),
+      });
+    }
+
+    res.status(500).json({
+      ok: false,
+      error: "Server error during registration. Please try again.",
+    });
+  }
+});
+
 
 // Register user
 router.post("/register", async (req, res) => {
