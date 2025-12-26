@@ -117,7 +117,7 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onClose }) => {
                 <p className="text-sm text-gray-500 mb-2">Or</p>
                 <button
                   onClick={handleManualInput}
-                  className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                  className="text-emerald-400 hover:text-emerald-300 text-sm font-medium transition-colors"
                 >
                   Enter Asset ID manually
                 </button>

@@ -6,6 +6,7 @@ import {
   Plus,
   Eye,
   CheckCircle,
+  ShoppingCart,
 } from "lucide-react";
 import { Land } from "../types";
 import { useAuth } from "../hooks/useAuth";
@@ -370,28 +371,29 @@ const LandDatabase: React.FC = () => {
           {filteredLands.map((land) => (
             <div
               key={land._id || land.id}
-              className="rounded-lg border border-slate-800 bg-slate-900/60 backdrop-blur-xl shadow-sm overflow-hidden hover:shadow-lg hover:shadow-emerald-500/10 transition-all"
+              className="group rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl shadow-sm overflow-hidden hover:shadow-xl hover:shadow-emerald-500/20 hover:border-emerald-500/40 transition-all duration-300 hover:-translate-y-1 flex flex-col h-full"
             >
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="text-lg font-semibold text-white mb-1">
-                      Asset ID: {land.assetId}
-                    </h3>
-                    <p className="text-sm text-slate-400">
-                      Survey No: {land.surveyNumber}
-                    </p>
-                  </div>
-                  <div className="flex flex-col space-y-1">
+              <div className="p-6 flex flex-col flex-1">
+                {/* Header Section */}
+                <div className="mb-4">
+                  <h3 className="text-xl font-bold text-white mb-2">
+                    {land.assetId}
+                  </h3>
+                  <p className="text-sm text-slate-400 mb-3">
+                    Survey No: {land.surveyNumber}
+                  </p>
+                  
+                  {/* Status Badges - Horizontal */}
+                  <div className="flex flex-wrap gap-2">
                     <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
+                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
                         land.status
                       )}`}
                     >
                       {land.status.replace("_", " ")}
                     </span>
                     <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${getVerificationColor(
+                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${getVerificationColor(
                         land.verificationStatus
                       )}`}
                     >
@@ -400,50 +402,72 @@ const LandDatabase: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="space-y-2 mb-4">
-                  <div className="flex items-center text-slate-400">
-                    <MapPin className="h-4 w-4 mr-2" />
-                    <span className="text-sm">
-                      {land.village}, {land.taluka}, {land.district}
-                    </span>
+                {/* Divider */}
+                <div className="border-t border-slate-800/50 mb-4"></div>
+
+                {/* Location */}
+                <div className="flex items-start gap-2 mb-4">
+                  <MapPin className="h-4 w-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                  <span className="text-sm text-slate-300 line-clamp-2">
+                    {land.village} • {land.taluka} • {land.district}
+                  </span>
+                </div>
+
+                {/* Details Grid */}
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <p className="text-xs text-slate-500 mb-1">Type</p>
+                    <div className="flex items-center gap-2">
+                      <Home className="h-4 w-4 text-slate-400" />
+                      <p className="text-sm text-white font-medium">{land.landType}</p>
+                    </div>
                   </div>
-                  <div className="flex items-center text-slate-400">
-                    <Home className="h-4 w-4 mr-2" />
-                    <span className="text-sm">
-                      {land.landType} • {land.area.acres || 0} Acres
-                    </span>
+                  <div>
+                    <p className="text-xs text-slate-500 mb-1">Area</p>
+                    <p className="text-sm text-white font-medium">{land.area.acres || 0} Acres</p>
                   </div>
                 </div>
 
-                {land.currentOwner ? (
-                  <div className="bg-slate-800/50 rounded-md p-3 mb-4 border border-slate-700">
-                    <p className="text-sm font-medium text-white">
-                      Owner: {land.currentOwner.fullName}
-                    </p>
-                    <p className="text-xs text-slate-400">
-                      {land.currentOwner.email}
-                    </p>
-                  </div>
-                ) : (
-                  <div className="bg-yellow-500/20 rounded-md p-3 mb-4 border border-yellow-500/30">
-                    <p className="text-sm font-medium text-yellow-400">
-                      No current owner assigned
-                    </p>
-                    {auth.user?.verificationStatus !== "VERIFIED" && (
-                      <p className="text-xs text-yellow-500 mt-1">
-                        Complete verification to claim ownership
+                {/* Owner/For Sale Section - Fixed Height */}
+                <div className="mb-4 min-h-[80px]">
+                  {land.currentOwner ? (
+                    <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700 h-full">
+                      <p className="text-xs text-slate-400 mb-1">Current Owner</p>
+                      <p className="text-sm font-semibold text-white truncate">
+                        {land.currentOwner.fullName}
                       </p>
-                    )}
-                  </div>
-                )}
+                      <p className="text-xs text-slate-500 mt-0.5 truncate">
+                        {land.currentOwner.email}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="bg-yellow-500/10 rounded-lg p-3 border border-yellow-500/30 h-full">
+                      <p className="text-sm font-semibold text-yellow-400">
+                        No current owner
+                      </p>
+                      {auth.user?.verificationStatus !== "VERIFIED" && (
+                        <p className="text-xs text-yellow-500/80 mt-1">
+                          Complete verification to claim
+                        </p>
+                      )}
+                    </div>
+                  )}
+                  
+                  {land.marketInfo.isForSale && (
+                    <div className="bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-lg p-3 border border-emerald-500/30 mt-2">
+                      <p className="text-xs text-emerald-400 mb-1">Listed for Sale</p>
+                      <p className="text-lg font-bold text-emerald-300">
+                        ₹{land.marketInfo.askingPrice?.toLocaleString()}
+                      </p>
+                    </div>
+                  )}
+                </div>
 
-                {land.marketInfo.isForSale && (
-                  <div className="bg-emerald-500/20 rounded-md p-3 mb-4 border border-emerald-500/30">
-                    <p className="text-sm font-medium text-emerald-300">
-                      For Sale: ₹{land.marketInfo.askingPrice?.toLocaleString()}
-                    </p>
-                  </div>
-                )}
+                {/* Spacer to push buttons to bottom */}
+                <div className="flex-grow"></div>
+
+                {/* Divider */}
+                <div className="border-t border-slate-800/50 mb-4"></div>
 
                 <div className="flex space-x-2">
                   <button
@@ -506,7 +530,7 @@ const LandDatabase: React.FC = () => {
                   <div className="mt-3 flex items-center justify-center">
                     <button
                       onClick={() => handleDownloadCertificate(land._id || land.id, land.assetId)}
-                      className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                      className="text-sm text-emerald-400 hover:text-emerald-300 font-medium transition-colors"
                     >
                       Download Digital Certificate
                     </button>

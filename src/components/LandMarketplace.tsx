@@ -612,14 +612,12 @@ const LandCard: React.FC<LandCardProps> = ({
 }) => {
   const { auth } = useAuth();
   const [imageError, setImageError] = useState(false);
-  // Keep only isFavorited state (initialized from server-provided isLiked or user's likedLands)
   const [isFavorited, setIsFavorited] = useState<boolean>(
     Boolean(land.isLiked ?? false)
   );
   const [isProcessingLike, setIsProcessingLike] = useState<boolean>(false);
 
   useEffect(() => {
-    // prefer server-provided flag, otherwise check current user's likedLands
     let initial = false;
     if (typeof land.isLiked !== "undefined") {
       initial = !!land.isLiked;
@@ -635,9 +633,7 @@ const LandCard: React.FC<LandCardProps> = ({
     setIsFavorited(initial);
   }, [land._id, land.isLiked, auth.user]);
 
-  // Handler for clicking the heart (stops propagation so parent card click doesn't fire)
   const handleToggleLike = async (e: React.MouseEvent) => {
-    // stop navigation / card click bubbling
     e.preventDefault();
     e.stopPropagation();
 
@@ -662,15 +658,12 @@ const LandCard: React.FC<LandCardProps> = ({
     }
   };
 
-  // Prevent card navigation when clicking interactive elements like the heart
   const handleCardClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement | null;
     if (target?.closest("button, svg, path")) {
-      // click came from the heart button or other interactive element; do NOT navigate
       return;
     }
 
-    // existing navigation logic
     if (onViewDetails) {
       try {
         onViewDetails();
@@ -688,44 +681,64 @@ const LandCard: React.FC<LandCardProps> = ({
   const features = land.marketInfo?.features || [];
   const amenities = land.marketInfo?.nearbyAmenities || [];
 
-  // Check if current user is the owner
   const isOwner =
     auth.user?.id === land?.currentOwner?.id ||
     auth.user?.id === land?.currentOwner?._id;
 
+  // Get status badge info
+  const getStatusBadge = () => {
+    if (land.status === "PENDING") {
+      return { text: "Pending", color: "bg-yellow-500/20 text-yellow-300 border-yellow-500/30" };
+    }
+    if (land.status === "DRAFT") {
+      return { text: "Draft", color: "bg-blue-500/20 text-blue-300 border-blue-500/30" };
+    }
+    return null;
+  };
+
+  const statusBadge = getStatusBadge();
+
   return (
     <div
-      className="rounded-lg border border-slate-800 bg-slate-900/60 backdrop-blur-xl shadow-sm hover:shadow-lg hover:shadow-emerald-500/10 transition-all duration-200 overflow-hidden cursor-pointer"
+      className="group rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl shadow-lg hover:shadow-xl hover:shadow-emerald-500/20 hover:border-emerald-500/40 transition-all duration-300 overflow-hidden cursor-pointer hover:-translate-y-1 flex flex-col h-full"
       onClick={handleCardClick}
     >
-      {/* Image */}
-      <div className="relative h-48 bg-slate-800">
+      {/* Image Section with Gradient Overlay */}
+      <div className="relative h-56 bg-gradient-to-br from-slate-800 to-slate-900 overflow-hidden">
         {!imageError && primaryImage ? (
           <img
             src={imageUrl}
             alt={`${land.village}, ${land.district}`}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             onError={() => setImageError(true)}
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-slate-800">
-            <Camera className="w-12 h-12 text-slate-600" />
+          <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-emerald-900/20 via-slate-900 to-teal-900/20">
+            <Camera className="w-16 h-16 text-slate-700 mb-2" />
+            <span className="text-xs text-slate-600 font-medium">No Image Available</span>
           </div>
         )}
 
-        {/* Favorite Button - only show in browse tab */}
+        {/* Dark gradient overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent" />
+
+        {/* Status Badge - Top Right */}
+        {statusBadge && (
+          <div className={`absolute top-3 right-3 px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md border ${statusBadge.color}`}>
+            {statusBadge.text}
+          </div>
+        )}
+
+        {/* Favorite Button - Top Left (only in browse tab) */}
         {activeTab === "browse" && (
           <button
             type="button"
             onClick={handleToggleLike}
             disabled={isProcessingLike}
             aria-pressed={isFavorited}
-            aria-label={
-              isFavorited ? "Remove from favorites" : "Add to favorites"
-            }
-            className="absolute top-3 right-3 p-2 bg-slate-900/80 backdrop-blur-sm rounded-full hover:bg-slate-900 transition-all"
+            aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
+            className="absolute top-3 left-3 p-2.5 bg-slate-900/80 backdrop-blur-md rounded-full hover:bg-slate-900 hover:scale-110 transition-all duration-200 border border-slate-700/50"
           >
-            {/* Use an inline SVG heart so we can control fill color without changing global styles */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -734,96 +747,79 @@ const LandCard: React.FC<LandCardProps> = ({
               role="img"
               aria-hidden={false}
               focusable="false"
-              className={
-                isFavorited ? "heart-icon heart-icon--liked" : "heart-icon"
-              }
+              className={isFavorited ? "heart-icon heart-icon--liked" : "heart-icon"}
               style={{ display: "block" }}
             >
               <path
                 d="M12 21s-7.2-4.73-9.33-7.04C1.73 11.77 3.26 7.5 7.5 6.1 9.4 5.4 11.6 6 12 6s2.6-.6 4.5.1C20.74 7.5 22.27 11.77 21.33 13.96 19.2 16.27 12 21 12 21z"
                 fill={isFavorited ? "#e53e3e" : "none"}
                 stroke={isFavorited ? "#e53e3e" : "currentColor"}
-                strokeWidth="1"
+                strokeWidth="1.5"
               />
             </svg>
           </button>
         )}
 
-        {/* Price Badge */}
+        {/* Price Badge - Bottom Left */}
         {land.marketInfo?.askingPrice && (
-          <div className="absolute bottom-3 left-3 bg-emerald-500 text-slate-950 px-3 py-1 rounded-full text-sm font-semibold shadow-md shadow-emerald-500/40">
+          <div className="absolute bottom-3 left-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 px-4 py-2 rounded-full text-base font-bold shadow-lg shadow-emerald-500/50">
             {formatPrice(land.marketInfo.askingPrice)}
           </div>
         )}
       </div>
 
-      {/* Content */}
-      <div className="p-4">
+      {/* Content Section - Fixed height with flex-grow */}
+      <div className="p-5 flex flex-col flex-grow">
         {/* Location */}
-        <div className="flex items-center gap-1 text-slate-400 mb-2">
-          <MapPin className="w-4 h-4" />
-          <span className="text-sm">
+        <div className="flex items-center gap-1.5 text-slate-400 mb-3">
+          <MapPin className="w-4 h-4 flex-shrink-0" />
+          <span className="text-sm truncate">
             {land.village}, {land.district}, {land.state}
           </span>
         </div>
 
         {/* Title */}
-        <h3 className="font-semibold text-white mb-2 line-clamp-2">
+        <h3 className="font-semibold text-lg text-white mb-2 line-clamp-1">
           {land.landType} Land - Survey No. {land.surveyNumber}
         </h3>
 
         {/* Area */}
-        <p className="text-slate-400 text-sm mb-3">{formatArea(land)}</p>
+        <p className="text-slate-300 text-sm font-medium mb-3">{formatArea(land)}</p>
 
-        {/* Description */}
+        {/* Description - Truncated to 2 lines */}
         {land.marketInfo?.description && (
-          <p className="text-slate-300 text-sm mb-3 line-clamp-2">
+          <p className="text-slate-400 text-xs mb-4 line-clamp-2 leading-relaxed">
             {land.marketInfo.description}
           </p>
         )}
 
-        {/* Features */}
+        {/* Features - Show max 2 */}
         {features.length > 0 && (
-          <div className="mb-3">
-            <ul className="text-xs text-slate-400 space-y-1">
-              {features.slice(0, 3).map((feature, index) => (
-                <li key={index} className="flex items-center gap-1">
-                  <Star className="w-3 h-3 text-yellow-400" />
-                  {feature}
-                </li>
-              ))}
-              {features.length > 3 && (
-                <li className="text-slate-500">
-                  +{features.length - 3} more features
-                </li>
-              )}
-            </ul>
-          </div>
-        )}
-
-        {/* Amenities */}
-        {amenities.length > 0 && (
-          <div className="mb-3">
-            <div className="flex flex-wrap gap-1">
-              {amenities.slice(0, 3).map((amenity, index) => (
+          <div className="mb-4">
+            <div className="flex flex-wrap gap-1.5">
+              {features.slice(0, 2).map((feature, index) => (
                 <span
                   key={index}
-                  className="px-2 py-1 bg-emerald-500/20 text-emerald-300 text-xs rounded-full border border-emerald-500/30"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-500/10 text-emerald-300 text-xs rounded-md border border-emerald-500/20"
                 >
-                  {amenity}
+                  <Star className="w-3 h-3 fill-emerald-400 text-emerald-400" />
+                  {feature}
                 </span>
               ))}
-              {amenities.length > 3 && (
-                <span className="px-2 py-1 bg-slate-800/50 text-slate-400 text-xs rounded-full">
-                  +{amenities.length - 3}
+              {features.length > 2 && (
+                <span className="inline-flex items-center px-2.5 py-1 bg-slate-800/50 text-slate-400 text-xs rounded-md">
+                  +{features.length - 2} more
                 </span>
               )}
             </div>
           </div>
         )}
 
+        {/* Spacer to push buttons to bottom */}
+        <div className="flex-grow" />
+
         {/* Action Buttons */}
-        <div className="flex gap-2 mt-4">
+        <div className="flex gap-2 mt-auto pt-4 border-t border-slate-800/50">
           {activeTab === "my-ads" || isOwner ? (
             // Owner actions
             <>
@@ -833,7 +829,7 @@ const LandCard: React.FC<LandCardProps> = ({
                     e.stopPropagation();
                     onEdit(land);
                   }}
-                  className="flex-1 flex items-center justify-center gap-2 py-2 px-4 border border-emerald-500 text-emerald-300 rounded-lg hover:bg-emerald-500/10 transition-colors"
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 border border-emerald-500/50 text-emerald-300 rounded-lg hover:bg-emerald-500/10 hover:border-emerald-500 transition-all duration-200 font-medium text-sm"
                 >
                   <Edit2 className="w-4 h-4" />
                   Edit
@@ -845,7 +841,7 @@ const LandCard: React.FC<LandCardProps> = ({
                     e.stopPropagation();
                     onRemove(land);
                   }}
-                  className="flex-1 flex items-center justify-center gap-2 py-2 px-4 border border-red-500 text-red-400 rounded-lg hover:bg-red-500/10 transition-colors"
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 border border-red-500/50 text-red-400 rounded-lg hover:bg-red-500/10 hover:border-red-500 transition-all duration-200 font-medium text-sm"
                 >
                   <Trash2 className="w-4 h-4" />
                   Remove
@@ -853,41 +849,44 @@ const LandCard: React.FC<LandCardProps> = ({
               )}
             </>
           ) : (
-            // Buyer actions - only show if user is not the owner
+            // Buyer actions
             <>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   onChat();
                 }}
-                className="flex-1 flex items-center justify-center gap-2 py-2 px-4 border border-emerald-500 text-emerald-300 rounded-lg hover:bg-emerald-500/10 transition-colors"
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 rounded-lg hover:from-emerald-400 hover:to-teal-400 transition-all duration-200 font-semibold text-sm shadow-lg shadow-emerald-500/30"
               >
                 <MessageCircle className="w-4 h-4" />
-                Chat
+                Chat with Seller
               </button>
-              {/* <button
+              <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  onBuy();
+                  onViewDetails();
                 }}
-                className="flex-1 flex items-center justify-center gap-2 py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex items-center justify-center gap-2 py-2.5 px-4 border border-slate-700 text-slate-300 rounded-lg hover:bg-slate-800 hover:border-slate-600 transition-all duration-200 font-medium text-sm"
               >
-                <ShoppingCart className="w-4 h-4" />
-                Buy Now
-              </button> */}
+                <Eye className="w-4 h-4" />
+              </button>
             </>
           )}
         </div>
 
         {/* Additional Info */}
-        <div className="mt-3 pt-3 border-t border-slate-800/50 flex items-center justify-between text-xs text-slate-500">
+        <div className="mt-3 pt-3 border-t border-slate-800/30 flex items-center justify-between text-xs text-slate-500">
           <span>
             Listed{" "}
             {new Date(
               land.marketInfo?.listedDate || land.createdAt
-            ).toLocaleDateString()}
+            ).toLocaleDateString("en-IN", { 
+              day: "numeric", 
+              month: "short", 
+              year: "numeric" 
+            })}
           </span>
-          <span className="flex items-center gap-1">
+          <span className="flex items-center gap-1 text-emerald-400">
             <Eye className="w-3 h-3" />
             Verified
           </span>

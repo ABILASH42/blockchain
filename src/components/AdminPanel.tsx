@@ -126,49 +126,49 @@ const AdminPanel: React.FC = () => {
     <div className="space-y-4">
       {pendingUsers.length === 0 ? (
         <div className="text-center py-12">
-          <Users className="mx-auto h-12 w-12 text-gray-400" />
-          <div className="text-gray-400 text-lg mt-4">No pending user verifications</div>
-          <p className="text-gray-500 mt-2">All users have been processed.</p>
+          <Users className="mx-auto h-12 w-12 text-slate-500" />
+          <div className="text-slate-300 text-lg mt-4">No pending user verifications</div>
+          <p className="text-slate-400 mt-2">All users have been processed.</p>
         </div>
       ) : (
         pendingUsers.map((user) => (
-          <div key={user._id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div key={user.id} className="bg-slate-900/60 rounded-lg shadow-lg border border-slate-800 p-6">
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center space-x-3 mb-4">
-                  <Users className="h-5 w-5 text-blue-500" />
-                  <h3 className="text-lg font-semibold text-gray-900">{user.fullName}</h3>
-                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                  <Users className="h-5 w-5 text-emerald-400" />
+                  <h3 className="text-lg font-semibold text-white">{user.fullName}</h3>
+                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/30">
                     PENDING VERIFICATION
                   </span>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600 mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-300 mb-4">
                   <div>
-                    <span className="font-medium">Email:</span> {user.email}
+                    <span className="font-medium text-white">Email:</span> {user.email}
                   </div>
                   <div>
-                    <span className="font-medium">Wallet:</span> {user.walletAddress?.substring(0, 10)}...
+                    <span className="font-medium text-white">Wallet:</span> {user.walletAddress?.substring(0, 10)}...
                   </div>
                 </div>
 
-                <div className="bg-gray-50 rounded-md p-4 mb-4">
-                  <h4 className="font-medium text-gray-700 mb-3">Submitted Verification Documents:</h4>
+                <div className="bg-slate-800/40 rounded-md p-4 mb-4 border border-slate-700/50">
+                  <h4 className="font-medium text-white mb-3">Submitted Verification Documents:</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                     {user.verificationDocuments?.panCard && (
-                      <div className="bg-white rounded p-3 border">
+                      <div className="bg-slate-800/60 rounded p-3 border border-slate-700">
                         <div className="flex items-center mb-2">
-                          <FileText className="h-4 w-4 text-green-600 mr-2" />
-                          <span className="font-medium text-gray-700">PAN Card</span>
+                          <FileText className="h-4 w-4 text-emerald-400 mr-2" />
+                          <span className="font-medium text-white">PAN Card</span>
                         </div>
-                        <div className="text-gray-600">Number: {user.verificationDocuments.panCard.number}</div>
+                        <div className="text-slate-300">Number: {user.verificationDocuments.panCard.number}</div>
                         {user.verificationDocuments.panCard.documentUrl && (
                           <div className="mt-2">
                             <a 
                               href={user.verificationDocuments.panCard.documentUrl} 
                               target="_blank" 
                               rel="noopener noreferrer"
-                              className="text-blue-600 hover:text-blue-800 text-xs flex items-center"
+                              className="text-emerald-400 hover:text-emerald-300 text-xs flex items-center transition-colors"
                             >
                               <Eye className="h-3 w-3 mr-1" />
                               View Document
@@ -178,19 +178,19 @@ const AdminPanel: React.FC = () => {
                       </div>
                     )}
                     {user.verificationDocuments?.aadhaarCard && (
-                      <div className="bg-white rounded p-3 border">
+                      <div className="bg-slate-800/60 rounded p-3 border border-slate-700">
                         <div className="flex items-center mb-2">
-                          <FileText className="h-4 w-4 text-green-600 mr-2" />
-                          <span className="font-medium text-gray-700">Aadhaar Card</span>
+                          <FileText className="h-4 w-4 text-emerald-400 mr-2" />
+                          <span className="font-medium text-white">Aadhaar Card</span>
                         </div>
-                        <div className="text-gray-600">Number: {user.verificationDocuments.aadhaarCard.number}</div>
+                        <div className="text-slate-300">Number: {user.verificationDocuments.aadhaarCard.number}</div>
                         {user.verificationDocuments.aadhaarCard.documentUrl && (
                           <div className="mt-2">
                             <a 
                               href={user.verificationDocuments.aadhaarCard.documentUrl} 
                               target="_blank" 
                               rel="noopener noreferrer"
-                              className="text-blue-600 hover:text-blue-800 text-xs flex items-center"
+                              className="text-emerald-400 hover:text-emerald-300 text-xs flex items-center transition-colors"
                             >
                               <Eye className="h-3 w-3 mr-1" />
                               View Document
@@ -200,19 +200,19 @@ const AdminPanel: React.FC = () => {
                       </div>
                     )}
                     {user.verificationDocuments?.drivingLicense && (
-                      <div className="bg-white rounded p-3 border">
+                      <div className="bg-slate-800/60 rounded p-3 border border-slate-700">
                         <div className="flex items-center mb-2">
-                          <FileText className="h-4 w-4 text-green-600 mr-2" />
-                          <span className="font-medium text-gray-700">Driving License</span>
+                          <FileText className="h-4 w-4 text-emerald-400 mr-2" />
+                          <span className="font-medium text-white">Driving License</span>
                         </div>
-                        <div className="text-gray-600">Number: {user.verificationDocuments.drivingLicense.number}</div>
+                        <div className="text-slate-300">Number: {user.verificationDocuments.drivingLicense.number}</div>
                         {user.verificationDocuments.drivingLicense.documentUrl && (
                           <div className="mt-2">
                             <a 
                               href={user.verificationDocuments.drivingLicense.documentUrl} 
                               target="_blank" 
                               rel="noopener noreferrer"
-                              className="text-blue-600 hover:text-blue-800 text-xs flex items-center"
+                              className="text-emerald-400 hover:text-emerald-300 text-xs flex items-center transition-colors"
                             >
                               <Eye className="h-3 w-3 mr-1" />
                               View Document
@@ -222,19 +222,19 @@ const AdminPanel: React.FC = () => {
                       </div>
                     )}
                     {user.verificationDocuments?.passport && (
-                      <div className="bg-white rounded p-3 border">
+                      <div className="bg-slate-800/60 rounded p-3 border border-slate-700">
                         <div className="flex items-center mb-2">
-                          <FileText className="h-4 w-4 text-green-600 mr-2" />
-                          <span className="font-medium text-gray-700">Passport</span>
+                          <FileText className="h-4 w-4 text-emerald-400 mr-2" />
+                          <span className="font-medium text-white">Passport</span>
                         </div>
-                        <div className="text-gray-600">Number: {user.verificationDocuments.passport.number}</div>
+                        <div className="text-slate-300">Number: {user.verificationDocuments.passport.number}</div>
                         {user.verificationDocuments.passport.documentUrl && (
                           <div className="mt-2">
                             <a 
                               href={user.verificationDocuments.passport.documentUrl} 
                               target="_blank" 
                               rel="noopener noreferrer"
-                              className="text-blue-600 hover:text-blue-800 text-xs flex items-center"
+                              className="text-emerald-400 hover:text-emerald-300 text-xs flex items-center transition-colors"
                             >
                               <Eye className="h-3 w-3 mr-1" />
                               View Document
@@ -249,12 +249,12 @@ const AdminPanel: React.FC = () => {
 
               <div className="flex flex-col space-y-2 ml-4">
                 <button
-                  onClick={() => handleVerifyUser(user._id, 'VERIFIED')}
-                  disabled={processingId === user._id}
-                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  onClick={() => handleVerifyUser(user.id, 'VERIFIED')}
+                  disabled={processingId === user.id}
+                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md text-sm font-semibold text-slate-950 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-md shadow-emerald-500/40"
                 >
-                  {processingId === user._id ? (
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  {processingId === user.id ? (
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-slate-950 mr-2"></div>
                   ) : (
                     <CheckCircle className="h-4 w-4 mr-2" />
                   )}
@@ -264,11 +264,11 @@ const AdminPanel: React.FC = () => {
                   onClick={() => {
                     const reason = prompt('Please provide a reason for rejection:');
                     if (reason) {
-                      handleVerifyUser(user._id, 'REJECTED', reason);
+                      handleVerifyUser(user.id, 'REJECTED', reason);
                     }
                   }}
-                  disabled={processingId === user._id}
-                  className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  disabled={processingId === user.id}
+                  className="inline-flex items-center px-4 py-2 border border-slate-700 rounded-md text-sm font-semibold text-white bg-slate-800 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   <XCircle className="h-4 w-4 mr-2" />
                   Reject
@@ -285,47 +285,47 @@ const AdminPanel: React.FC = () => {
     <div className="space-y-4">
       {allLands.length === 0 ? (
         <div className="text-center py-12">
-          <Database className="mx-auto h-12 w-12 text-gray-400" />
-          <div className="text-gray-400 text-lg mt-4">No lands registered</div>
-          <p className="text-gray-500 mt-2">No lands have been added to the database yet.</p>
+          <Database className="mx-auto h-12 w-12 text-slate-500" />
+          <div className="text-slate-300 text-lg mt-4">No lands registered</div>
+          <p className="text-slate-400 mt-2">No lands have been added to the database yet.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {allLands.map((land) => (
-            <div key={land._id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div key={land._id} className="bg-slate-900/60 rounded-lg shadow-lg border border-slate-800 p-6">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className="text-lg font-semibold text-white">
                     Asset ID: {land.assetId}
                   </h3>
-                  <p className="text-sm text-gray-600">Survey: {land.surveyNumber}</p>
+                  <p className="text-sm text-slate-400">Survey: {land.surveyNumber}</p>
                 </div>
                 <div className="flex flex-col space-y-1">
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    land.status === 'AVAILABLE' ? 'bg-green-100 text-green-800' :
-                    land.status === 'FOR_SALE' ? 'bg-blue-100 text-blue-800' :
-                    'bg-gray-100 text-gray-800'
+                    land.status === 'AVAILABLE' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' :
+                    land.status === 'FOR_SALE' ? 'bg-teal-500/20 text-teal-300 border border-teal-500/30' :
+                    'bg-slate-700/50 text-slate-300 border border-slate-600'
                   }`}>
                     {land.status.replace('_', ' ')}
                   </span>
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    land.verificationStatus === 'VERIFIED' ? 'bg-green-100 text-green-800' :
-                    land.verificationStatus === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-red-100 text-red-800'
+                    land.verificationStatus === 'VERIFIED' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' :
+                    land.verificationStatus === 'PENDING' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' :
+                    'bg-red-500/20 text-red-300 border border-red-500/30'
                   }`}>
                     {land.verificationStatus}
                   </span>
                 </div>
               </div>
               
-              <div className="space-y-2 text-sm text-gray-600">
-                <div>Location: {land.village}, {land.district}</div>
-                <div>Type: {land.landType}</div>
-                <div>Area: {land.area.acres || 0} Acres</div>
+              <div className="space-y-2 text-sm text-slate-300">
+                <div><span className="font-medium text-white">Location:</span> {land.village}, {land.district}</div>
+                <div><span className="font-medium text-white">Type:</span> {land.landType}</div>
+                <div><span className="font-medium text-white">Area:</span> {land.area.acres || 0} Acres</div>
                 {land.currentOwner && (
-                  <div>Owner: {land.currentOwner.fullName}</div>
+                  <div><span className="font-medium text-white">Owner:</span> {land.currentOwner.fullName}</div>
                 )}
-                <div>Digitalized: {land.digitalDocument.isDigitalized ? 'Yes' : 'No'}</div>
+                <div><span className="font-medium text-white">Digitalized:</span> {land.digitalDocument?.isDigitalized ? 'Yes' : 'No'}</div>
               </div>
             </div>
           ))}
@@ -338,43 +338,43 @@ const AdminPanel: React.FC = () => {
     <div className="space-y-4">
       {landTransactions.length === 0 ? (
         <div className="text-center py-12">
-          <ShoppingCart className="mx-auto h-12 w-12 text-gray-400" />
-          <div className="text-gray-400 text-lg mt-4">No pending land transactions</div>
-          <p className="text-gray-500 mt-2">All land transactions have been processed.</p>
+          <ShoppingCart className="mx-auto h-12 w-12 text-slate-500" />
+          <div className="text-slate-300 text-lg mt-4">No pending land transactions</div>
+          <p className="text-slate-400 mt-2">All land transactions have been processed.</p>
         </div>
       ) : (
         landTransactions.map((transaction) => (
-          <div key={transaction._id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div key={transaction._id} className="bg-slate-900/60 rounded-lg shadow-lg border border-slate-800 p-6">
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center space-x-3 mb-4">
-                  <ShoppingCart className="h-5 w-5 text-blue-500" />
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <ShoppingCart className="h-5 w-5 text-emerald-400" />
+                  <h3 className="text-lg font-semibold text-white">
                     Land Sale Transaction
                   </h3>
-                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/30">
                     {transaction.status.replace('_', ' ')}
                   </span>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600 mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-300 mb-4">
                   <div>
-                    <span className="font-medium">Asset ID:</span> {transaction.landId.assetId}
+                    <span className="font-medium text-white">Asset ID:</span> {transaction.landId.assetId}
                   </div>
                   <div>
-                    <span className="font-medium">Location:</span> {transaction.landId.village}, {transaction.landId.district}
+                    <span className="font-medium text-white">Location:</span> {transaction.landId.village}, {transaction.landId.district}
                   </div>
                   <div>
-                    <span className="font-medium">Seller:</span> {transaction.seller.fullName}
+                    <span className="font-medium text-white">Seller:</span> {transaction.seller.fullName}
                   </div>
                   <div>
-                    <span className="font-medium">Buyer:</span> {transaction.buyer.fullName}
+                    <span className="font-medium text-white">Buyer:</span> {transaction.buyer.fullName}
                   </div>
                   <div>
-                    <span className="font-medium">Agreed Price:</span> {formatPrice(transaction.agreedPrice)}
+                    <span className="font-medium text-white">Agreed Price:</span> {formatPrice(transaction.agreedPrice)}
                   </div>
                   <div>
-                    <span className="font-medium">Date:</span> {new Date(transaction.createdAt).toLocaleDateString()}
+                    <span className="font-medium text-white">Date:</span> {new Date(transaction.createdAt).toLocaleDateString()}
                   </div>
                 </div>
               </div>
@@ -383,10 +383,10 @@ const AdminPanel: React.FC = () => {
                 <button
                   onClick={() => handleReviewLandTransaction(transaction._id, 'approve')}
                   disabled={processingId === transaction._id}
-                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md text-sm font-semibold text-slate-950 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-md shadow-emerald-500/40"
                 >
                   {processingId === transaction._id ? (
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-slate-950 mr-2"></div>
                   ) : (
                     <CheckCircle className="h-4 w-4 mr-2" />
                   )}
@@ -401,7 +401,7 @@ const AdminPanel: React.FC = () => {
                     }
                   }}
                   disabled={processingId === transaction._id}
-                  className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="inline-flex items-center px-4 py-2 border border-slate-700 rounded-md text-sm font-semibold text-white bg-slate-800 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   <XCircle className="h-4 w-4 mr-2" />
                   Reject
@@ -417,21 +417,21 @@ const AdminPanel: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Admin Panel</h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <h1 className="text-2xl font-bold text-white">Admin Panel</h1>
+        <p className="mt-1 text-sm text-slate-400">
           Manage users, transactions, and land registry
         </p>
       </div>
 
       {/* Tab Navigation */}
-      <div className="border-b border-gray-200">
+      <div className="border-b border-slate-800">
         <nav className="-mb-px flex space-x-8">
           <button
             onClick={() => setActiveTab('users')}
-            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+            className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
               activeTab === 'users'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                ? 'border-emerald-500 text-emerald-400'
+                : 'border-transparent text-slate-400 hover:text-slate-300 hover:border-slate-700'
             }`}
           >
             <Users className="inline h-4 w-4 mr-2" />
@@ -439,10 +439,10 @@ const AdminPanel: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveTab('land-transactions')}
-            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+            className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
               activeTab === 'land-transactions'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                ? 'border-emerald-500 text-emerald-400'
+                : 'border-transparent text-slate-400 hover:text-slate-300 hover:border-slate-700'
             }`}
           >
             <ShoppingCart className="inline h-4 w-4 mr-2" />
@@ -450,10 +450,10 @@ const AdminPanel: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveTab('lands')}
-            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+            className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
               activeTab === 'lands'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                ? 'border-emerald-500 text-emerald-400'
+                : 'border-transparent text-slate-400 hover:text-slate-300 hover:border-slate-700'
             }`}
           >
             <Database className="inline h-4 w-4 mr-2" />
@@ -463,14 +463,14 @@ const AdminPanel: React.FC = () => {
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md">
+        <div className="bg-red-500/20 border border-red-500/30 text-red-300 px-4 py-3 rounded-md">
           {error}
         </div>
       )}
 
       {loading ? (
         <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
         </div>
       ) : (
         <>

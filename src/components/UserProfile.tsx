@@ -325,6 +325,25 @@ const UserProfile: React.FC<UserProfileProps> = ({ onNavigateToLand }) => {
     );
   }
 
+  // Calculate profile completion
+  const calculateProfileCompletion = () => {
+    const fields = [
+      auth.user?.fullName,
+      auth.user?.email,
+      auth.user?.profile?.phoneNumber,
+      auth.user?.profile?.address?.street,
+      auth.user?.profile?.address?.city,
+      auth.user?.profile?.address?.state,
+      auth.user?.profile?.address?.zipCode,
+      auth.user?.walletAddress,
+    ];
+    
+    const filledFields = fields.filter(field => field && field.trim() !== '').length;
+    return Math.round((filledFields / fields.length) * 100);
+  };
+
+  const completionPercentage = calculateProfileCompletion();
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -367,6 +386,25 @@ const UserProfile: React.FC<UserProfileProps> = ({ onNavigateToLand }) => {
           </div>
         )}
       </div>
+
+      {/* Profile Completion Indicator */}
+      {completionPercentage < 100 && (
+        <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 backdrop-blur-xl p-4">
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <h3 className="text-sm font-semibold text-emerald-300">Complete Your Profile</h3>
+              <p className="text-xs text-emerald-200/70">Add missing information to unlock all features</p>
+            </div>
+            <span className="text-lg font-bold text-emerald-300">{completionPercentage}%</span>
+          </div>
+          <div className="w-full bg-slate-900/50 rounded-full h-2 overflow-hidden">
+            <div 
+              className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500 rounded-full"
+              style={{ width: `${completionPercentage}%` }}
+            />
+          </div>
+        </div>
+      )}
 
       {error && (
         <div className="bg-red-500/20 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg">
@@ -450,7 +488,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ onNavigateToLand }) => {
                       alt="User ID QR Code"
                       className="w-32 h-32"
                     />
-                    <p className="text-xs text-slate-400 text-center mt-2">
+                    <p className="text-xs text-slate-600 text-center mt-2 font-medium">
                       Scan to get User ID
                     </p>
                   </div>
@@ -460,6 +498,9 @@ const UserProfile: React.FC<UserProfileProps> = ({ onNavigateToLand }) => {
                   </div>
                 )}
               </div>
+              <p className="text-xs text-slate-400 text-center mt-2">
+                Share this QR code for quick identity verification
+              </p>
             </div>
           </div>
         </div>
@@ -518,8 +559,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ onNavigateToLand }) => {
                   placeholder="Enter phone number"
                 />
               ) : (
-                <p className="text-white">
-                  {auth.user.profile?.phoneNumber || "Not provided"}
+                <p className={auth.user.profile?.phoneNumber ? "text-white" : "text-slate-500 italic"}>
+                  {auth.user.profile?.phoneNumber || "Click 'Edit Profile' to add"}
                 </p>
               )}
             </div>
@@ -556,8 +597,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ onNavigateToLand }) => {
                     placeholder="Enter street address"
                   />
                 ) : (
-                  <p className="text-white">
-                    {auth.user.profile?.address?.street || "Not provided"}
+                  <p className={auth.user.profile?.address?.street ? "text-white" : "text-slate-500 italic"}>
+                    {auth.user.profile?.address?.street || "Click 'Edit Profile' to add"}
                   </p>
                 )}
               </div>
@@ -576,8 +617,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ onNavigateToLand }) => {
                     placeholder="Enter city"
                   />
                 ) : (
-                  <p className="text-white">
-                    {auth.user.profile?.address?.city || "Not provided"}
+                  <p className={auth.user.profile?.address?.city ? "text-white" : "text-slate-500 italic"}>
+                    {auth.user.profile?.address?.city || "Click 'Edit Profile' to add"}
                   </p>
                 )}
               </div>
@@ -596,8 +637,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ onNavigateToLand }) => {
                     placeholder="Enter state"
                   />
                 ) : (
-                  <p className="text-white">
-                    {auth.user.profile?.address?.state || "Not provided"}
+                  <p className={auth.user.profile?.address?.state ? "text-white" : "text-slate-500 italic"}>
+                    {auth.user.profile?.address?.state || "Click 'Edit Profile' to add"}
                   </p>
                 )}
               </div>
@@ -616,8 +657,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ onNavigateToLand }) => {
                     placeholder="Enter ZIP code"
                   />
                 ) : (
-                  <p className="text-white">
-                    {auth.user.profile?.address?.zipCode || "Not provided"}
+                  <p className={auth.user.profile?.address?.zipCode ? "text-white" : "text-slate-500 italic"}>
+                    {auth.user.profile?.address?.zipCode || "Click 'Edit Profile' to add"}
                   </p>
                 )}
               </div>

@@ -17,7 +17,7 @@ const IPFSLinks: React.FC<IPFSLinksProps> = ({ hash, fileName }) => {
         href={localUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-blue-600 underline hover:text-blue-800"
+        className="text-emerald-400 underline hover:text-emerald-300 transition-colors"
       >
         {fileName || 'View Document'}
       </a>

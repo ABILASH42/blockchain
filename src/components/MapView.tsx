@@ -140,7 +140,7 @@ const MapView: React.FC<MapViewProps> = ({
           <Marker position={userLocation}>
             <Popup>
               <div className="text-center">
-                <MapPin className="h-4 w-4 text-blue-600 mx-auto mb-1" />
+                <MapPin className="h-4 w-4 text-emerald-500 mx-auto mb-1" />
                 <p className="font-medium">Your Location</p>
               </div>
             </Popup>
@@ -223,7 +223,7 @@ const MapView: React.FC<MapViewProps> = ({
           </div>
           {userLocation && (
             <div className="flex items-center">
-              <MapPin className="h-3 w-3 text-blue-600 mr-2" />
+              <MapPin className="h-3 w-3 text-emerald-500 mr-2" />
               <span>Your Location</span>
             </div>
           )}

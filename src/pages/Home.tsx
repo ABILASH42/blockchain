@@ -162,7 +162,7 @@ const Home: React.FC = () => {
                 <ArrowRight className="h-4 w-4" />
               </button>
               <button
-                onClick={() => navigate('/login')}
+                onClick={() => navigate('/marketplace-preview')}
                 className="inline-flex items-center gap-2 rounded-2xl border border-emerald-500/40 bg-transparent px-5 py-3 text-sm font-medium text-emerald-200 hover:bg-emerald-500/10"
               >
                 Explore Marketplace

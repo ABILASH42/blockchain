@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Mail, Lock, Wallet, User, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, Wallet, User, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import MinimalHeader from './layout/MinimalHeader';
 
 const Login: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -13,6 +14,19 @@ const Login: React.FC = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState({
+    fullName: '',
+    email: '',
+    password: '',
+    walletAddress: ''
+  });
+  const [fieldValid, setFieldValid] = useState({
+    fullName: false,
+    email: false,
+    password: false,
+    walletAddress: false
+  });
+  const [passwordStrength, setPasswordStrength] = useState<'weak' | 'medium' | 'strong' | null>(null);
 
   const { login, register, connectWallet } = useAuth();
 
@@ -54,16 +68,73 @@ const Login: React.FC = () => {
     }
   };
 
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateWalletAddress = (address: string): boolean => {
+    const walletRegex = /^0x[a-fA-F0-9]{40}$/;
+    return walletRegex.test(address);
+  };
+
+  const calculatePasswordStrength = (password: string): 'weak' | 'medium' | 'strong' => {
+    let strength = 0;
+    if (password.length >= 8) strength++;
+    if (password.length >= 12) strength++;
+    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[^a-zA-Z0-9]/.test(password)) strength++;
+    
+    if (strength <= 2) return 'weak';
+    if (strength <= 4) return 'medium';
+    return 'strong';
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+
+    // Real-time validation
+    let isValid = false;
+    let errorMsg = '';
+
+    switch (name) {
+      case 'fullName':
+        isValid = value.trim().length >= 2;
+        errorMsg = isValid ? '' : 'Name must be at least 2 characters';
+        break;
+      case 'email':
+        isValid = validateEmail(value);
+        errorMsg = isValid ? '' : value ? 'Please enter a valid email address' : '';
+        break;
+      case 'password':
+        isValid = value.length >= 6;
+        errorMsg = isValid ? '' : value ? 'Password must be at least 6 characters' : '';
+        if (value) {
+          setPasswordStrength(calculatePasswordStrength(value));
+        } else {
+          setPasswordStrength(null);
+        }
+        break;
+      case 'walletAddress':
+        isValid = validateWalletAddress(value);
+        errorMsg = isValid ? '' : value ? 'Invalid wallet address format (0x + 40 hex characters)' : '';
+        break;
+    }
+
+    setFieldErrors(prev => ({ ...prev, [name]: errorMsg }));
+    setFieldValid(prev => ({ ...prev, [name]: isValid }));
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-950 to-slate-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-2xl px-8 py-10 shadow-2xl shadow-slate-900/40">
+    <>
+      <MinimalHeader />
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-950 to-slate-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 pt-24">
+        <div className="max-w-md w-full space-y-8 bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-2xl px-8 py-10 shadow-2xl shadow-slate-900/40">
         <div className="text-center">
           <div className="mx-auto h-12 w-12 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-2xl flex items-center justify-center shadow-md shadow-emerald-500/40">
             <User className="h-6 w-6 text-slate-950" />
@@ -80,7 +151,7 @@ const Login: React.FC = () => {
           <div className="rounded-md shadow-sm space-y-4">
             {!isLogin && (
               <div>
-                <label htmlFor="fullName" className="sr-only">
+                <label htmlFor="fullName" className="block text-sm font-medium text-slate-300 mb-1">
                   Full Name
                 </label>
                 <div className="relative">
@@ -94,16 +165,34 @@ const Login: React.FC = () => {
                     required={!isLogin}
                     value={formData.fullName}
                     onChange={handleInputChange}
-                    className="relative block w-full pl-10 pr-3 py-3 border border-slate-800 bg-slate-950/80 placeholder-slate-500 text-slate-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                    placeholder="Full Name"
+                    className={`relative block w-full pl-10 pr-10 py-3.5 border bg-slate-950/80 placeholder-slate-400 text-slate-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${
+                      formData.fullName && fieldErrors.fullName ? 'border-red-500/50' : 
+                      formData.fullName && fieldValid.fullName ? 'border-emerald-500/50' : 'border-slate-800'
+                    }`}
+                    placeholder="Enter your full name"
                   />
+                  {formData.fullName && (
+                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                      {fieldValid.fullName ? (
+                        <CheckCircle className="h-5 w-5 text-emerald-400" />
+                      ) : (
+                        <AlertCircle className="h-5 w-5 text-red-400" />
+                      )}
+                    </div>
+                  )}
                 </div>
+                {fieldErrors.fullName && formData.fullName && (
+                  <p className="mt-1 text-xs text-red-400 flex items-center">
+                    <AlertCircle className="h-3 w-3 mr-1" />
+                    {fieldErrors.fullName}
+                  </p>
+                )}
               </div>
             )}
 
             <div>
-              <label htmlFor="email" className="sr-only">
-                Email address
+              <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-1">
+                Email Address
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -116,14 +205,32 @@ const Login: React.FC = () => {
                   required
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="relative block w-full pl-10 pr-3 py-3 border border-slate-800 bg-slate-950/80 placeholder-slate-500 text-slate-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                  placeholder="Email address"
+                  className={`relative block w-full pl-10 pr-10 py-3.5 border bg-slate-950/80 placeholder-slate-400 text-slate-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${
+                    formData.email && fieldErrors.email ? 'border-red-500/50' : 
+                    formData.email && fieldValid.email ? 'border-emerald-500/50' : 'border-slate-800'
+                  }`}
+                  placeholder="Enter your email"
                 />
+                {formData.email && (
+                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                    {fieldValid.email ? (
+                      <CheckCircle className="h-5 w-5 text-emerald-400" />
+                    ) : (
+                      <AlertCircle className="h-5 w-5 text-red-400" />
+                    )}
+                  </div>
+                )}
               </div>
+              {fieldErrors.email && formData.email && (
+                <p className="mt-1 text-xs text-red-400 flex items-center">
+                  <AlertCircle className="h-3 w-3 mr-1" />
+                  {fieldErrors.email}
+                </p>
+              )}
             </div>
 
             <div>
-              <label htmlFor="password" className="sr-only">
+              <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-1">
                 Password
               </label>
               <div className="relative">
@@ -137,8 +244,11 @@ const Login: React.FC = () => {
                   required
                   value={formData.password}
                   onChange={handleInputChange}
-                  className="relative block w-full pl-10 pr-10 py-3 border border-slate-800 bg-slate-950/80 placeholder-slate-500 text-slate-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                  placeholder="Password"
+                  className={`relative block w-full pl-10 pr-10 py-3.5 border bg-slate-950/80 placeholder-slate-400 text-slate-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${
+                    formData.password && fieldErrors.password ? 'border-red-500/50' : 
+                    formData.password && fieldValid.password ? 'border-emerald-500/50' : 'border-slate-800'
+                  }`}
+                  placeholder="Enter your password"
                 />
                 <button
                   type="button"
@@ -146,17 +256,44 @@ const Login: React.FC = () => {
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-slate-400" />
+                    <EyeOff className="h-5 w-5 text-slate-400 hover:text-slate-300" />
                   ) : (
-                    <Eye className="h-5 w-5 text-slate-400" />
+                    <Eye className="h-5 w-5 text-slate-400 hover:text-slate-300" />
                   )}
                 </button>
               </div>
+              {formData.password && passwordStrength && (
+                <div className="mt-2">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs text-slate-400">Password strength:</span>
+                    <span className={`text-xs font-medium ${
+                      passwordStrength === 'strong' ? 'text-emerald-400' :
+                      passwordStrength === 'medium' ? 'text-yellow-400' :
+                      'text-red-400'
+                    }`}>
+                      {passwordStrength.charAt(0).toUpperCase() + passwordStrength.slice(1)}
+                    </span>
+                  </div>
+                  <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                    <div className={`h-full transition-all duration-300 ${
+                      passwordStrength === 'strong' ? 'w-full bg-emerald-500' :
+                      passwordStrength === 'medium' ? 'w-2/3 bg-yellow-500' :
+                      'w-1/3 bg-red-500'
+                    }`} />
+                  </div>
+                </div>
+              )}
+              {fieldErrors.password && formData.password && (
+                <p className="mt-1 text-xs text-red-400 flex items-center">
+                  <AlertCircle className="h-3 w-3 mr-1" />
+                  {fieldErrors.password}
+                </p>
+              )}
             </div>
 
             {!isLogin && (
               <div>
-                <label htmlFor="walletAddress" className="sr-only">
+                <label htmlFor="walletAddress" className="block text-sm font-medium text-slate-300 mb-1">
                   Wallet Address
                 </label>
                 <div className="relative">
@@ -170,10 +307,28 @@ const Login: React.FC = () => {
                     required={!isLogin}
                     value={formData.walletAddress}
                     onChange={handleInputChange}
-                    className="relative block w-full pl-10 pr-3 py-3 border border-slate-800 bg-slate-950/80 placeholder-slate-500 text-slate-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                    placeholder="Wallet Address (0x...)"
+                    className={`relative block w-full pl-10 pr-10 py-3.5 border bg-slate-950/80 placeholder-slate-400 text-slate-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${
+                      formData.walletAddress && fieldErrors.walletAddress ? 'border-red-500/50' : 
+                      formData.walletAddress && fieldValid.walletAddress ? 'border-emerald-500/50' : 'border-slate-800'
+                    }`}
+                    placeholder="0x..."
                   />
+                  {formData.walletAddress && (
+                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                      {fieldValid.walletAddress ? (
+                        <CheckCircle className="h-5 w-5 text-emerald-400" />
+                      ) : (
+                        <AlertCircle className="h-5 w-5 text-red-400" />
+                      )}
+                    </div>
+                  )}
                 </div>
+                {fieldErrors.walletAddress && formData.walletAddress && (
+                  <p className="mt-1 text-xs text-red-400 flex items-center">
+                    <AlertCircle className="h-3 w-3 mr-1" />
+                    {fieldErrors.walletAddress}
+                  </p>
+                )}
               </div>
             )}
           </div>
@@ -231,8 +386,9 @@ const Login: React.FC = () => {
             </button>
           </div>
         </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -7,12 +7,13 @@ import LandDetailPage from './components/LandDetailPage';
 import Home from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import MarketplacePreview from './components/MarketplacePreview';
 
 function AppContent() {
   const { auth } = useAuth();
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [landId, setLandId] = useState('');
-  const [chatNavigation, setChatNavigation] = useState<{landId: string, sellerId: string, isFirstChat?: boolean} | null>(null);
+  const [chatNavigation, setChatNavigation] = useState<{landId: string, sellerId: string, isFirstChat?: boolean, activeTab?: string} | null>(null);
 
   // Show loading spinner while authentication is being checked
   if (auth.loading) {
@@ -34,13 +35,16 @@ function AppContent() {
     setCurrentPage('land-details');
   };
 
-  const navigateToDashboard = (tab?: string, landId?: string, sellerId?: string) => {
+  const navigateToDashboard = (tab?: string, landId?: string, sellerId?: string) =>{
     setCurrentPage('dashboard');
     // If coming from land details with specific chat info
     if (tab && landId && sellerId) {
       setChatNavigation({ landId, sellerId, activeTab: tab });
     } else if (tab) {
       setChatNavigation({ landId: '', sellerId: '', activeTab: tab });
+    } else {
+      // When navigating back without a specific tab, default to marketplace
+      setChatNavigation({ landId: '', sellerId: '', activeTab: 'marketplace' });
     }
   };
 
@@ -66,7 +70,7 @@ function AppContent() {
   // Show dashboard with navigation capability
   return <Dashboard 
     onNavigateToLand={navigateToLandDetails}
-    initialTab={chatNavigation ? "chats" : undefined}
+    initialTab={chatNavigation?.activeTab || undefined}
     chatNavigation={chatNavigation || undefined}
     onClearChatNavigation={clearChatNavigation}
   />;
@@ -99,6 +103,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/marketplace-preview" element={<MarketplacePreview />} />
             <Route path="/login" element={<LoginRoute />} />
             <Route path="/dashboard" element={<AppContent />} />
             <Route path="*" element={<Navigate to="/" replace />} />

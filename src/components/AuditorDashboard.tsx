@@ -68,7 +68,7 @@ const AuditorDashboard: React.FC = () => {
   const getActionColor = (action: string) => {
     if (action.includes('APPROVE') || action.includes('VERIFY')) return 'text-green-600';
     if (action.includes('REJECT') || action.includes('CANCEL')) return 'text-red-600';
-    if (action.includes('LOGIN') || action.includes('REGISTER')) return 'text-blue-600';
+    if (action.includes('LOGIN') || action.includes('REGISTER')) return 'text-emerald-500';
     return 'text-gray-600';
   };
 
@@ -133,7 +133,7 @@ const AuditorDashboard: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <div className="flex items-center">
-            <Users className="h-8 w-8 text-blue-600" />
+            <Users className="h-8 w-8 text-emerald-500" />
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Total Users</p>
               <p className="text-2xl font-bold text-gray-900">{statistics.totalUsers || 0}</p>

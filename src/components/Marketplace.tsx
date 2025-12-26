@@ -264,7 +264,7 @@ const Marketplace: React.FC = () => {
             onClick={() => setActiveTab("marketplace")}
             className={`py-2 px-1 border-b-2 font-medium text-sm ${
               activeTab === "marketplace"
-                ? "border-blue-500 text-blue-600"
+                ? "border-emerald-500 text-emerald-400"
                 : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
             }`}
           >
@@ -274,7 +274,7 @@ const Marketplace: React.FC = () => {
             onClick={() => setActiveTab("my-lands")}
             className={`py-2 px-1 border-b-2 font-medium text-sm ${
               activeTab === "my-lands"
-                ? "border-blue-500 text-blue-600"
+                ? "border-emerald-500 text-emerald-400"
                 : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
             }`}
           >
@@ -700,13 +700,13 @@ const Marketplace: React.FC = () => {
                     {features.map((feature, index) => (
                       <span
                         key={index}
-                        className="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded-md"
+                        className="inline-flex items-center px-2 py-1 bg-emerald-500/20 text-emerald-300 text-sm rounded-md border border-emerald-500/30"
                       >
                         {feature}
                         <button
                           type="button"
                           onClick={() => removeFeature(feature)}
-                          className="ml-1 text-blue-600 hover:text-blue-800"
+                          className="ml-1 text-emerald-400 hover:text-emerald-300 transition-colors"
                         >
                           ×
                         </button>

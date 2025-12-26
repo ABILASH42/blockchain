@@ -27,6 +27,8 @@ import QRScanner from "./QRScanner";
 import TwoFactorAuth from "./TwoFactorAuth";
 import AuditorDashboard from "./AuditorDashboard";
 import AdminTransactionDashboard from "./AdminTransactionDashboard";
+import OnboardingChecklist from "./onboarding/OnboardingChecklist";
+import WelcomeBanner from "./onboarding/WelcomeBanner";
 
 interface DashboardProps {
   onNavigateToLand?: (landId: string) => void;
@@ -49,6 +51,13 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigateToLand, initialTab, ini
   const [chatsLoading, setChatsLoading] = useState(false);
   const [autoFillMessage, setAutoFillMessage] = useState<string | null>(null);
   const [pendingChat, setPendingChat] = useState<{landId: string, recipientId: string, recipientName: string} | null>(null);
+
+  // Update activeTab when initialTab prop changes
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
 
   // Redirect non-admin users away from land-database tab
   useEffect(() => {
@@ -200,7 +209,13 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigateToLand, initialTab, ini
           </div>
         );
       case "marketplace":
-        return <LandMarketplace onNavigateToLand={onNavigateToLand} />;
+        return (
+          <div className="space-y-6">
+            <WelcomeBanner />
+            <OnboardingChecklist onNavigate={setActiveTab} />
+            <LandMarketplace onNavigateToLand={onNavigateToLand} />
+          </div>
+        );
       case "chats":
         return (
           <div className="space-y-6">
@@ -260,8 +275,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigateToLand, initialTab, ini
                         // Always show the other user (receiver), not the current user
                         
                         // Ensure proper string comparison for user IDs
-                        const currentUserId = auth.user?.id || auth.user?._id;
-                        const buyerId = chat.buyer?.id || chat.buyer?._id;
+                        const currentUserId = auth.user?.id;
+                        const buyerId = chat.buyer?.id || chat.buyer?.id;
                         const otherUser = buyerId === currentUserId ? chat.seller : chat.buyer;
                         const lastMessage = chat.messages && chat.messages.length > 0 ? chat.messages[chat.messages.length - 1] : null;
                         const isActive = selectedChat?._id === chat._id;
@@ -433,6 +448,96 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigateToLand, initialTab, ini
                 Scan QR Code
               </button>
             </div>
+
+            {/* How It Works Section */}
+            {!verificationResult && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* How It Works */}
+                <div className="rounded-lg border border-slate-800 bg-slate-900/60 backdrop-blur-xl shadow-sm p-6">
+                  <h2 className="text-lg font-semibold text-white mb-4 flex items-center">
+                    <QrCode className="h-5 w-5 mr-2 text-emerald-400" />
+                    How It Works
+                  </h2>
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-8 h-8 bg-emerald-500/20 rounded-full flex items-center justify-center text-emerald-300 font-semibold text-sm">
+                        1
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-medium text-white">Click Scan QR Code</h3>
+                        <p className="text-xs text-slate-400 mt-1">
+                          Open your device camera to scan land certificates
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-8 h-8 bg-emerald-500/20 rounded-full flex items-center justify-center text-emerald-300 font-semibold text-sm">
+                        2
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-medium text-white">Scan the QR Code</h3>
+                        <p className="text-xs text-slate-400 mt-1">
+                          Point your camera at the QR code on the land document
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-8 h-8 bg-emerald-500/20 rounded-full flex items-center justify-center text-emerald-300 font-semibold text-sm">
+                        3
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-medium text-white">View Results</h3>
+                        <p className="text-xs text-slate-400 mt-1">
+                          Instantly see ownership details and verification status
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Benefits */}
+                <div className="rounded-lg border border-slate-800 bg-slate-900/60 backdrop-blur-xl shadow-sm p-6">
+                  <h2 className="text-lg font-semibold text-white mb-4 flex items-center">
+                    <CheckCircle className="h-5 w-5 mr-2 text-emerald-400" />
+                    Benefits
+                  </h2>
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p className="text-sm text-slate-300">
+                          <span className="font-medium text-white">Instant Verification:</span> Get results in seconds
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p className="text-sm text-slate-300">
+                          <span className="font-medium text-white">Fraud Prevention:</span> Verify authenticity on-chain
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p className="text-sm text-slate-300">
+                          <span className="font-medium text-white">Complete History:</span> View full ownership trail
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p className="text-sm text-slate-300">
+                          <span className="font-medium text-white">Secure & Private:</span> Blockchain-backed verification
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {verificationResult && (
               <div className="rounded-lg border border-slate-800 bg-slate-900/60 backdrop-blur-xl shadow-sm p-6">

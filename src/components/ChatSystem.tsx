@@ -132,7 +132,7 @@ const ChatSystem: React.FC = () => {
       case 'REJECTION':
         return <X className="h-4 w-4 text-red-600" />;
       default:
-        return <MessageCircle className="h-4 w-4 text-blue-600" />;
+        return <MessageCircle className="h-4 w-4 text-emerald-500" />;
     }
   };
 
@@ -203,7 +203,7 @@ const ChatSystem: React.FC = () => {
                     </h3>
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                       chat.status === 'DEAL_AGREED' ? 'bg-green-100 text-green-800' :
-                      chat.status === 'ACTIVE' ? 'bg-blue-100 text-blue-800' :
+                      chat.status === 'ACTIVE' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' :
                       'bg-gray-100 text-gray-800'
                     }`}>
                       {chat.status.replace('_', ' ')}
@@ -353,7 +353,7 @@ const ChatSystem: React.FC = () => {
                           )}
                           
                           <p className={`text-xs mt-1 ${
-                            isOwnMessage ? 'text-blue-100' : 'text-gray-500'
+                            isOwnMessage ? 'text-emerald-100' : 'text-gray-500'
                           }`}>
                             {new Date(message.timestamp).toLocaleTimeString()}
                           </p>

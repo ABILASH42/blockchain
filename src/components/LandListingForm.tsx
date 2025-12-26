@@ -339,13 +339,13 @@ const LandListingForm: React.FC<LandListingFormProps> = ({ land, onClose, onSucc
                 {formData.features.map((feature, index) => (
                   <span
                     key={index}
-                    className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
+                    className="inline-flex items-center gap-1 px-3 py-1 bg-emerald-500/20 text-emerald-300 rounded-full text-sm border border-emerald-500/30"
                   >
                     {feature}
                     <button
                       type="button"
                       onClick={() => removeFeature(index)}
-                      className="text-blue-600 hover:text-blue-800"
+                      className="text-emerald-400 hover:text-emerald-300 transition-colors"
                     >
                       <X className="w-3 h-3" />
                     </button>

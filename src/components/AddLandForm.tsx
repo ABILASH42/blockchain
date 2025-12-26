@@ -247,10 +247,10 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-xl font-semibold text-gray-900">Add Land to Database</h2>
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+      <div className="bg-slate-900 border border-slate-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+        <div className="flex items-center justify-between p-6 border-b border-slate-800">
+          <h2 className="text-xl font-semibold text-white">Add Land to Database</h2>
           <button
             onClick={() => {
               setSuccess('');
@@ -258,7 +258,7 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
               setDocumentFile(null);
               onClose();
             }}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-slate-400 hover:text-white transition-colors"
           >
             <X className="h-6 w-6" />
           </button>
@@ -267,11 +267,11 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/* Basic Information */}
           <div className="space-y-4">
-            <h3 className="text-lg font-medium text-gray-900">Basic Information</h3>
+            <h3 className="text-lg font-medium text-white">Basic Information</h3>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   Survey Number *
                 </label>
                 <input
@@ -280,13 +280,13 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                   required
                   value={formData.surveyNumber}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-800/60 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
                   placeholder="123/1A"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   Sub Division
                 </label>
                 <input
@@ -294,13 +294,13 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                   name="subDivision"
                   value={formData.subDivision}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-800/60 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
                   placeholder="1A1"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   Owner ID (MongoDB User ObjectId) *
                 </label>
                 <input
@@ -309,7 +309,7 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                   required
                   value={formData.ownerId}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-800/60 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
                   placeholder="MongoDB User ObjectId"
                 />
               </div>
@@ -318,14 +318,14 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
 
           {/* Location Information */}
           <div className="space-y-4">
-            <h3 className="text-lg font-medium text-gray-900 flex items-center">
+            <h3 className="text-lg font-medium text-white flex items-center">
               <MapPin className="h-5 w-5 mr-2" />
               Location Details
             </h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   Village *
                 </label>
                 <input
@@ -334,13 +334,13 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                   required
                   value={formData.village}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-800/60 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
                   placeholder="Village name"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   Taluka *
                 </label>
                 <input
@@ -349,13 +349,13 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                   required
                   value={formData.taluka}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-800/60 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
                   placeholder="Taluka name"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   District *
                 </label>
                 <input
@@ -364,13 +364,13 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                   required
                   value={formData.district}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-800/60 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
                   placeholder="District name"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   State *
                 </label>
                 <select
@@ -378,7 +378,7 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                   required
                   value={formData.state}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-800/60 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
                 >
                   <option value="">Select State</option>
                   <option value="Karnataka">Karnataka</option>
@@ -395,7 +395,7 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   Pincode *
                 </label>
                 <input
@@ -404,7 +404,7 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                   required
                   value={formData.pincode}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-800/60 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
                   placeholder="560001"
                   pattern="[0-9]{6}"
                   maxLength={6}
@@ -412,30 +412,30 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   Geographic Location
                 </label>
                 <div className="flex space-x-2">
-                  <button
-                    type="button"
-                    onClick={() => setShowMap(true)}
-                    className="flex-1 inline-flex items-center justify-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
-                  >
-                    <Navigation className="h-4 w-4 mr-2" />
-                    {formData.coordinates ? 'Update Location' : 'Set Location'}
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowMap(true)}
+                      className="flex-1 inline-flex items-center justify-center px-3 py-2 border border-slate-700 rounded-md text-sm font-medium text-white bg-slate-800/60 hover:bg-slate-700 transition-colors"
+                    >
+                      <Navigation className="h-4 w-4 mr-2" />
+                      {formData.coordinates ? 'Update Location' : 'Set Location'}
+                    </button>
                   {formData.coordinates && (
                     <button
                       type="button"
                       onClick={() => setFormData(prev => ({ ...prev, coordinates: null }))}
-                      className="px-3 py-2 border border-red-300 rounded-md text-sm font-medium text-red-700 bg-white hover:bg-red-50 transition-colors"
+                      className="px-3 py-2 border border-red-500/30 rounded-md text-sm font-medium text-red-300 bg-red-500/10 hover:bg-red-500/20 transition-colors"
                     >
                       Clear
                     </button>
                   )}
                 </div>
                 {formData.coordinates && (
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-slate-400 mt-1">
                     Lat: {formData.coordinates.latitude.toFixed(6)}, 
                     Lng: {formData.coordinates.longitude.toFixed(6)}
                   </p>
@@ -446,14 +446,14 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
 
           {/* Land Details */}
           <div className="space-y-4">
-            <h3 className="text-lg font-medium text-gray-900 flex items-center">
+            <h3 className="text-lg font-medium text-white flex items-center">
               <Home className="h-5 w-5 mr-2" />
               Land Details
             </h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   Land Type *
                 </label>
                 <select
@@ -461,7 +461,7 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                   required
                   value={formData.landType}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-800/60 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
                 >
                   <option value="">Select Type</option>
                   <option value="AGRICULTURAL">Agricultural</option>
@@ -473,14 +473,14 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   Classification
                 </label>
                 <select
                   name="classification"
                   value={formData.classification}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-800/60 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
                 >
                   <option value="">Select Classification</option>
                   <option value="DRY">Dry</option>
@@ -492,7 +492,7 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   Area (Acres)
                 </label>
                 <input
@@ -502,13 +502,13 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                   min="0"
                   value={formData.area.acres}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-800/60 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
                   placeholder="2.5"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   Area (Guntas)
                 </label>
                 <input
@@ -517,13 +517,13 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                   min="0"
                   value={formData.area.guntas}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-800/60 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
                   placeholder="20"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   Area (Sq Ft)
                 </label>
                 <input
@@ -532,13 +532,13 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                   min="0"
                   value={formData.area.sqft}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-800/60 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
                   placeholder="1000"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   Soil Type
                 </label>
                 <input
@@ -546,7 +546,7 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                   name="soilType"
                   value={formData.soilType}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-800/60 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
                   placeholder="Black soil, Red soil, etc."
                 />
               </div>
@@ -555,7 +555,7 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
             {/* Additional Details */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   Water Source
                 </label>
                 <input
@@ -563,13 +563,13 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                   name="waterSource"
                   value={formData.waterSource}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-800/60 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
                   placeholder="Borewell, Canal, River, etc."
                 />
               </div>
               
               <div className="space-y-3">
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-white">
                   Infrastructure
                 </label>
                 <div className="flex space-x-6">
@@ -579,9 +579,9 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                       name="roadAccess"
                       checked={formData.roadAccess}
                       onChange={handleInputChange}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="rounded border-slate-700 text-emerald-500 bg-slate-800/60 focus:ring-emerald-500"
                     />
-                    <span className="ml-2 text-sm text-gray-700">Road Access</span>
+                    <span className="ml-2 text-sm text-slate-300">Road Access</span>
                   </label>
                   <label className="flex items-center">
                     <input
@@ -589,9 +589,9 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                       name="electricityConnection"
                       checked={formData.electricityConnection}
                       onChange={handleInputChange}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="rounded border-slate-700 text-emerald-500 bg-slate-800/60 focus:ring-emerald-500"
                     />
-                    <span className="ml-2 text-sm text-gray-700">Electricity</span>
+                    <span className="ml-2 text-sm text-slate-300">Electricity</span>
                   </label>
                 </div>
               </div>
@@ -600,11 +600,11 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
 
           {/* Boundaries */}
           <div className="space-y-4">
-            <h3 className="text-lg font-medium text-gray-900">Boundaries</h3>
+            <h3 className="text-lg font-medium text-white">Boundaries</h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   North
                 </label>
                 <input
@@ -612,13 +612,13 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                   name="boundaries.north"
                   value={formData.boundaries.north}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-800/60 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
                   placeholder="Road / Survey No. / Owner name"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   South
                 </label>
                 <input
@@ -626,13 +626,13 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                   name="boundaries.south"
                   value={formData.boundaries.south}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-800/60 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
                   placeholder="Road / Survey No. / Owner name"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   East
                 </label>
                 <input
@@ -640,13 +640,13 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                   name="boundaries.east"
                   value={formData.boundaries.east}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-800/60 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
                   placeholder="Road / Survey No. / Owner name"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   West
                 </label>
                 <input
@@ -654,7 +654,7 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                   name="boundaries.west"
                   value={formData.boundaries.west}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-800/60 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
                   placeholder="Road / Survey No. / Owner name"
                 />
               </div>
@@ -663,12 +663,12 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
 
           {/* Document Upload */}
           <div className="space-y-4">
-            <h3 className="text-lg font-medium text-gray-900 flex items-center">
+            <h3 className="text-lg font-medium text-white flex items-center">
               <Upload className="h-5 w-5 mr-2" />
               Original Documents
             </h3>
             
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
+            <div className="border-2 border-dashed border-slate-700 rounded-lg p-6 bg-slate-800/20">
               <input
                 type="file"
                 accept=".pdf,.jpg,.jpeg,.png"
@@ -680,11 +680,11 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                 htmlFor="document"
                 className="cursor-pointer flex flex-col items-center"
               >
-                <Upload className="h-12 w-12 text-gray-400 mb-4" />
-                <p className="text-sm text-gray-600 text-center">
+                <Upload className="h-12 w-12 text-slate-500 mb-4" />
+                <p className="text-sm text-slate-300 text-center">
                   Click to upload original land document
                   <br />
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-slate-400">
                     PDF, JPG, PNG files accepted (Max 10MB)
                   </span>
                 </p>
@@ -693,18 +693,18 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
 
             {documentFile && (
               <div className="space-y-2">
-                <h4 className="font-medium text-gray-700">Uploaded File:</h4>
-                <div className="flex items-center justify-between bg-gray-50 p-2 rounded">
+                <h4 className="font-medium text-white">Uploaded File:</h4>
+                <div className="flex items-center justify-between bg-slate-800/40 border border-slate-700 p-2 rounded">
                   <div className="flex items-center">
-                    <span className="text-sm text-gray-700">{documentFile.name}</span>
-                    <span className="text-xs text-gray-500 ml-2">
+                    <span className="text-sm text-slate-300">{documentFile.name}</span>
+                    <span className="text-xs text-slate-400 ml-2">
                       ({(documentFile.size / 1024 / 1024).toFixed(2)} MB)
                     </span>
                   </div>
                   <button
                     type="button"
                     onClick={removeFile}
-                    className="text-red-500 hover:text-red-700"
+                    className="text-red-400 hover:text-red-300 transition-colors"
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -714,33 +714,33 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md">
+            <div className="bg-red-500/20 border border-red-500/30 text-red-300 px-4 py-3 rounded-md">
               {error}
             </div>
           )}
 
           {success && (
-            <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-md">
+            <div className="bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 px-4 py-3 rounded-md">
               {success}
             </div>
           )}
 
-          <div className="flex justify-end space-x-4 pt-6 border-t">
+          <div className="flex justify-end space-x-4 pt-6 border-t border-slate-800">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+              className="px-4 py-2 border border-slate-700 rounded-md text-white bg-slate-800 hover:bg-slate-700 transition-colors font-semibold"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="px-6 py-2 bg-emerald-500 text-slate-950 rounded-md hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-semibold shadow-md shadow-emerald-500/40"
             >
               {loading ? (
                 <div className="flex items-center">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-slate-950 mr-2"></div>
                   Adding...
                 </div>
               ) : (
@@ -752,19 +752,19 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
         
         {/* Map Modal */}
         {showMap && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-lg max-w-4xl w-full max-h-[80vh] overflow-hidden">
-              <div className="flex items-center justify-between p-4 border-b">
-                <h3 className="text-lg font-semibold text-gray-900">Select Land Location</h3>
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+            <div className="bg-slate-900 border border-slate-800 rounded-lg max-w-4xl w-full max-h-[80vh] overflow-hidden shadow-2xl">
+              <div className="flex items-center justify-between p-4 border-b border-slate-800">
+                <h3 className="text-lg font-semibold text-white">Select Land Location</h3>
                 <button
                   onClick={() => setShowMap(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-slate-400 hover:text-white transition-colors"
                 >
                   <X className="h-6 w-6" />
                 </button>
               </div>
               <div className="p-4">
-                <p className="text-sm text-gray-600 mb-4">
+                <p className="text-sm text-slate-300 mb-4">
                   Click on the map to set the geographic location of the land
                 </p>
                 <MapView

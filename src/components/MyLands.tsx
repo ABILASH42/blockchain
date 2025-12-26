@@ -339,7 +339,7 @@ const MyLands: React.FC = () => {
                 {land.digitalDocument?.isDigitalized && (
                   <div className="mt-3 flex items-center justify-center">
                     <button
-                      className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                      className="text-sm text-emerald-400 hover:text-emerald-300 font-medium transition-colors"
                     >
                       Download Digital Certificate
                     </button>
@@ -436,13 +436,13 @@ const MyLands: React.FC = () => {
                     {features.map((feature, index) => (
                       <span
                         key={index}
-                        className="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded-md"
+                        className="inline-flex items-center px-2 py-1 bg-emerald-500/20 text-emerald-300 text-sm rounded-md border border-emerald-500/30"
                       >
                         {feature}
                         <button
                           type="button"
                           onClick={() => removeFeature(feature)}
-                          className="ml-1 text-blue-600 hover:text-blue-800"
+                          className="ml-1 text-emerald-400 hover:text-emerald-300 transition-colors"
                         >
                           ×
                         </button>
