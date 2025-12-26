@@ -178,30 +178,30 @@ const LandDatabase: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "AVAILABLE":
-        return "bg-green-100 text-green-800";
+        return "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
       case "FOR_SALE":
-        return "bg-blue-100 text-blue-800";
+        return "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
       case "UNDER_TRANSACTION":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30";
       case "SOLD":
-        return "bg-gray-100 text-gray-800";
+        return "bg-slate-800/50 text-slate-400 border border-slate-700";
       case "DISPUTED":
-        return "bg-red-100 text-red-800";
+        return "bg-red-500/20 text-red-400 border border-red-500/30";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-slate-800/50 text-slate-400 border border-slate-700";
     }
   };
 
   const getVerificationColor = (status: string) => {
     switch (status) {
       case "VERIFIED":
-        return "bg-green-100 text-green-800";
+        return "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
       case "PENDING":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30";
       case "REJECTED":
-        return "bg-red-100 text-red-800";
+        return "bg-red-500/20 text-red-400 border border-red-500/30";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-slate-800/50 text-slate-400 border border-slate-700";
     }
   };
 
@@ -209,15 +209,15 @@ const LandDatabase: React.FC = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Land Database</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-semibold tracking-tight text-white">Land Database</h1>
+          <p className="mt-1 text-sm text-slate-400">
             Comprehensive database of all registered lands
           </p>
         </div>
         {auth.user?.role === "ADMIN" && (
           <button
             onClick={() => setShowAddForm(true)}
-            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center px-4 py-2 border border-transparent rounded-2xl shadow-lg shadow-emerald-500/40 text-sm font-semibold text-slate-950 bg-emerald-500 hover:bg-emerald-400 transition-colors"
           >
             <Plus className="h-4 w-4 mr-2" />
             Add Land
@@ -226,11 +226,11 @@ const LandDatabase: React.FC = () => {
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md">
+        <div className="bg-red-500/20 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg">
           {error}
           <button
             onClick={() => setError("")}
-            className="ml-2 text-red-800 hover:text-red-900"
+            className="ml-2 text-red-300 hover:text-red-200 transition-colors"
           >
             ×
           </button>
@@ -238,17 +238,17 @@ const LandDatabase: React.FC = () => {
       )}
 
       {/* Search and Filters */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="rounded-lg border border-slate-800 bg-slate-900/60 backdrop-blur-xl shadow-sm p-6">
         {/* Asset ID Search */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-slate-300 mb-2">
             Search by Asset ID
           </label>
           <div className="flex space-x-2">
             <input
               type="text"
               placeholder="Enter Asset ID (e.g., KA001123456)"
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="flex-1 px-3 py-2 border border-slate-700 bg-slate-900/50 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 placeholder-slate-500"
               onKeyPress={(e) => {
                 if (e.key === "Enter") {
                   const target = e.target as HTMLInputElement;
@@ -267,7 +267,7 @@ const LandDatabase: React.FC = () => {
                   handleSearchById(input.value.trim());
                 }
               }}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              className="px-4 py-2 bg-emerald-500 text-slate-950 rounded-lg hover:bg-emerald-400 font-semibold shadow-md shadow-emerald-500/40 transition-colors"
             >
               Search
             </button>
@@ -286,7 +286,7 @@ const LandDatabase: React.FC = () => {
                 });
                 loadLands();
               }}
-              className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
+              className="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors"
             >
               Clear
             </button>
@@ -297,14 +297,14 @@ const LandDatabase: React.FC = () => {
           <div className="lg:col-span-2">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-gray-400" />
+                <Search className="h-5 w-5 text-slate-500" />
               </div>
               <input
                 type="text"
                 placeholder="Search by Village, District, Survey Number..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="block w-full pl-10 pr-3 py-2 border border-slate-700 bg-slate-900/50 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 placeholder-slate-500"
               />
             </div>
           </div>
@@ -312,7 +312,7 @@ const LandDatabase: React.FC = () => {
           <select
             value={filters.state}
             onChange={(e) => handleFilterChange("state", e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="px-3 py-2 border border-slate-700 bg-slate-900/50 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
           >
             <option value="">All States</option>
             <option value="Karnataka">Karnataka</option>
@@ -326,7 +326,7 @@ const LandDatabase: React.FC = () => {
           <select
             value={filters.landType}
             onChange={(e) => handleFilterChange("landType", e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="px-3 py-2 border border-slate-700 bg-slate-900/50 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
           >
             <option value="">All Types</option>
             <option value="AGRICULTURAL">Agricultural</option>
@@ -339,7 +339,7 @@ const LandDatabase: React.FC = () => {
           <select
             value={filters.status}
             onChange={(e) => handleFilterChange("status", e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="px-3 py-2 border border-slate-700 bg-slate-900/50 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
           >
             <option value="">All Status</option>
             <option value="AVAILABLE">Available</option>
@@ -354,12 +354,12 @@ const LandDatabase: React.FC = () => {
       {/* Lands Grid */}
       {loading ? (
         <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
         </div>
       ) : filteredLands.length === 0 ? (
         <div className="text-center py-12">
-          <div className="text-gray-400 text-lg">No lands found</div>
-          <p className="text-gray-500 mt-2">
+          <div className="text-slate-400 text-lg">No lands found</div>
+          <p className="text-slate-500 mt-2">
             {lands.length === 0
               ? "No lands have been added to the database yet."
               : "Try adjusting your search or filter criteria."}
@@ -370,15 +370,15 @@ const LandDatabase: React.FC = () => {
           {filteredLands.map((land) => (
             <div
               key={land._id || land.id}
-              className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
+              className="rounded-lg border border-slate-800 bg-slate-900/60 backdrop-blur-xl shadow-sm overflow-hidden hover:shadow-lg hover:shadow-emerald-500/10 transition-all"
             >
               <div className="p-6">
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                    <h3 className="text-lg font-semibold text-white mb-1">
                       Asset ID: {land.assetId}
                     </h3>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-slate-400">
                       Survey No: {land.surveyNumber}
                     </p>
                   </div>
@@ -401,13 +401,13 @@ const LandDatabase: React.FC = () => {
                 </div>
 
                 <div className="space-y-2 mb-4">
-                  <div className="flex items-center text-gray-600">
+                  <div className="flex items-center text-slate-400">
                     <MapPin className="h-4 w-4 mr-2" />
                     <span className="text-sm">
                       {land.village}, {land.taluka}, {land.district}
                     </span>
                   </div>
-                  <div className="flex items-center text-gray-600">
+                  <div className="flex items-center text-slate-400">
                     <Home className="h-4 w-4 mr-2" />
                     <span className="text-sm">
                       {land.landType} • {land.area.acres || 0} Acres
@@ -416,21 +416,21 @@ const LandDatabase: React.FC = () => {
                 </div>
 
                 {land.currentOwner ? (
-                  <div className="bg-gray-50 rounded-md p-3 mb-4">
-                    <p className="text-sm font-medium text-gray-700">
+                  <div className="bg-slate-800/50 rounded-md p-3 mb-4 border border-slate-700">
+                    <p className="text-sm font-medium text-white">
                       Owner: {land.currentOwner.fullName}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-slate-400">
                       {land.currentOwner.email}
                     </p>
                   </div>
                 ) : (
-                  <div className="bg-yellow-50 rounded-md p-3 mb-4">
-                    <p className="text-sm font-medium text-yellow-800">
+                  <div className="bg-yellow-500/20 rounded-md p-3 mb-4 border border-yellow-500/30">
+                    <p className="text-sm font-medium text-yellow-400">
                       No current owner assigned
                     </p>
                     {auth.user?.verificationStatus !== "VERIFIED" && (
-                      <p className="text-xs text-yellow-600 mt-1">
+                      <p className="text-xs text-yellow-500 mt-1">
                         Complete verification to claim ownership
                       </p>
                     )}
@@ -438,8 +438,8 @@ const LandDatabase: React.FC = () => {
                 )}
 
                 {land.marketInfo.isForSale && (
-                  <div className="bg-blue-50 rounded-md p-3 mb-4">
-                    <p className="text-sm font-medium text-blue-800">
+                  <div className="bg-emerald-500/20 rounded-md p-3 mb-4 border border-emerald-500/30">
+                    <p className="text-sm font-medium text-emerald-300">
                       For Sale: ₹{land.marketInfo.askingPrice?.toLocaleString()}
                     </p>
                   </div>
@@ -451,7 +451,7 @@ const LandDatabase: React.FC = () => {
                       setSelectedLand(land);
                       setShowModal(true);
                     }}
-                    className="flex-1 inline-flex items-center justify-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                    className="flex-1 inline-flex items-center justify-center px-3 py-2 border border-slate-700 rounded-lg text-sm font-medium text-white bg-slate-800/50 hover:bg-slate-800 transition-colors"
                   >
                     <Eye className="h-4 w-4 mr-1" />
                     View
@@ -461,7 +461,7 @@ const LandDatabase: React.FC = () => {
                     auth.user?.verificationStatus === "VERIFIED" && (
                       <button
                         onClick={() => handleClaimOwnership(land._id || land.id)}
-                        className="flex-1 inline-flex items-center justify-center px-3 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-green-600 hover:bg-green-700 transition-colors"
+                        className="flex-1 inline-flex items-center justify-center px-3 py-2 border border-transparent rounded-lg text-sm font-semibold text-slate-950 bg-emerald-500 hover:bg-emerald-400 shadow-md shadow-emerald-500/40 transition-colors"
                       >
                         Claim
                       </button>
@@ -484,7 +484,7 @@ const LandDatabase: React.FC = () => {
                             });
                           }
                         }}
-                        className="flex-1 inline-flex items-center justify-center px-3 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                        className="flex-1 inline-flex items-center justify-center px-3 py-2 border border-transparent rounded-lg text-sm font-semibold text-slate-950 bg-emerald-500 hover:bg-emerald-400 shadow-md shadow-emerald-500/40 transition-colors"
                       >
                         List for Sale
                       </button>

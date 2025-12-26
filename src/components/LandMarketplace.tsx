@@ -267,7 +267,7 @@ const LandMarketplace: React.FC<LandMarketplaceProps> = ({
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-96">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -275,10 +275,10 @@ const LandMarketplace: React.FC<LandMarketplaceProps> = ({
   if (error) {
     return (
       <div className="text-center py-12">
-        <p className="text-red-600 mb-4">{error}</p>
+        <p className="text-red-400 mb-4">{error}</p>
         <button
           onClick={loadMarketplaceLands}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          className="bg-emerald-500 text-slate-950 px-4 py-2 rounded-2xl hover:bg-emerald-400 font-semibold shadow-md shadow-emerald-500/40 transition"
         >
           Try Again
         </button>
@@ -290,10 +290,10 @@ const LandMarketplace: React.FC<LandMarketplaceProps> = ({
     <div className="max-w-7xl mx-auto px-4 py-6">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-semibold tracking-tight text-white mb-2">
           Land Marketplace
         </h1>
-        <p className="text-gray-600">
+        <p className="text-slate-400">
           Discover verified lands for sale across India
         </p>
 
@@ -302,30 +302,30 @@ const LandMarketplace: React.FC<LandMarketplaceProps> = ({
           <nav className="flex space-x-8">
             <button
               onClick={() => setActiveTab("browse")}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === "browse"
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  ? "border-emerald-500 text-emerald-300"
+                  : "border-transparent text-slate-400 hover:text-white hover:border-slate-700"
               }`}
             >
               Browse All
             </button>
             <button
               onClick={() => setActiveTab("my-ads")}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === "my-ads"
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  ? "border-emerald-500 text-emerald-300"
+                  : "border-transparent text-slate-400 hover:text-white hover:border-slate-700"
               }`}
             >
               My Ads
             </button>
             <button
               onClick={() => setActiveTab("liked")}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === "liked"
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  ? "border-emerald-500 text-emerald-300"
+                  : "border-transparent text-slate-400 hover:text-white hover:border-slate-700"
               }`}
             >
               Liked Ads
@@ -335,18 +335,18 @@ const LandMarketplace: React.FC<LandMarketplaceProps> = ({
       </div>
 
       {/* Search and Filters */}
-      <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
+      <div className="rounded-lg border border-slate-800 bg-slate-900/60 backdrop-blur-xl shadow-sm p-6 mb-6">
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search */}
           <div className="flex-1">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 w-5 h-5" />
               <input
                 type="text"
                 placeholder="Search by location, survey number, or description..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 border border-slate-700 bg-slate-900/50 text-white rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 placeholder-slate-500"
               />
             </div>
           </div>
@@ -354,7 +354,7 @@ const LandMarketplace: React.FC<LandMarketplaceProps> = ({
           {/* Filter Toggle */}
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center gap-2 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50"
+            className="flex items-center gap-2 px-4 py-3 border border-slate-700 bg-slate-900/50 text-white rounded-lg hover:bg-slate-800 transition-colors"
           >
             <Filter className="w-5 h-5" />
             Filters
@@ -363,10 +363,10 @@ const LandMarketplace: React.FC<LandMarketplaceProps> = ({
 
         {/* Advanced Filters */}
         {showFilters && (
-          <div className="mt-6 pt-6 border-t border-gray-200">
+          <div className="mt-6 pt-6 border-t border-slate-800/50">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-slate-300 mb-1">
                   Min Price (₹)
                 </label>
                 <input
@@ -375,12 +375,12 @@ const LandMarketplace: React.FC<LandMarketplaceProps> = ({
                   onChange={(e) =>
                     handleFilterChange("minPrice", e.target.value)
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-900/50 text-white rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 placeholder-slate-500"
                   placeholder="0"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-slate-300 mb-1">
                   Max Price (₹)
                 </label>
                 <input
@@ -389,12 +389,12 @@ const LandMarketplace: React.FC<LandMarketplaceProps> = ({
                   onChange={(e) =>
                     handleFilterChange("maxPrice", e.target.value)
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-900/50 text-white rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 placeholder-slate-500"
                   placeholder="No limit"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-slate-300 mb-1">
                   District
                 </label>
                 <input
@@ -403,24 +403,24 @@ const LandMarketplace: React.FC<LandMarketplaceProps> = ({
                   onChange={(e) =>
                     handleFilterChange("district", e.target.value)
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-900/50 text-white rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 placeholder-slate-500"
                   placeholder="Any district"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-slate-300 mb-1">
                   State
                 </label>
                 <input
                   type="text"
                   value={filters.state}
                   onChange={(e) => handleFilterChange("state", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-900/50 text-white rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 placeholder-slate-500"
                   placeholder="Any state"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-slate-300 mb-1">
                   Land Type
                 </label>
                 <select
@@ -428,7 +428,7 @@ const LandMarketplace: React.FC<LandMarketplaceProps> = ({
                   onChange={(e) =>
                     handleFilterChange("landType", e.target.value)
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-900/50 text-white rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                 >
                   <option value="">All Types</option>
                   <option value="AGRICULTURAL">Agricultural</option>
@@ -447,13 +447,13 @@ const LandMarketplace: React.FC<LandMarketplaceProps> = ({
                   onChange={(e) =>
                     handleFilterChange("minArea", e.target.value)
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-900/50 text-white rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 placeholder-slate-500"
                   placeholder="0"
                   step="0.1"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-slate-300 mb-1">
                   Max Area (acres)
                 </label>
                 <input
@@ -462,7 +462,7 @@ const LandMarketplace: React.FC<LandMarketplaceProps> = ({
                   onChange={(e) =>
                     handleFilterChange("maxArea", e.target.value)
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-900/50 text-white rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 placeholder-slate-500"
                   placeholder="No limit"
                   step="0.1"
                 />
@@ -470,7 +470,7 @@ const LandMarketplace: React.FC<LandMarketplaceProps> = ({
               <div className="flex items-end">
                 <button
                   onClick={clearFilters}
-                  className="w-full px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                  className="w-full px-4 py-2 text-slate-300 border border-slate-700 rounded-lg hover:bg-slate-800 transition-colors"
                 >
                   Clear All
                 </button>
@@ -482,7 +482,7 @@ const LandMarketplace: React.FC<LandMarketplaceProps> = ({
 
       {/* Results Count */}
       <div className="mb-4">
-        <p className="text-gray-600">
+        <p className="text-slate-400">
           Showing {filteredLands.length} of{" "}
           {activeTab === "browse"
             ? lands.length
@@ -500,13 +500,13 @@ const LandMarketplace: React.FC<LandMarketplaceProps> = ({
       {/* Land Cards Grid */}
       {filteredLands.length === 0 ? (
         <div className="text-center py-12">
-          <div className="text-gray-400 mb-4">
+          <div className="text-slate-500 mb-4">
             <MapPin className="w-16 h-16 mx-auto" />
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="text-lg font-medium text-white mb-2">
             No lands found
           </h3>
-          <p className="text-gray-600">
+          <p className="text-slate-400">
             Try adjusting your search criteria or filters
           </p>
         </div>
@@ -534,14 +534,14 @@ const LandMarketplace: React.FC<LandMarketplaceProps> = ({
       {/* Chat Modal */}
       {showChat && selectedLand && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg w-full max-w-4xl h-[80vh] flex flex-col">
-            <div className="flex items-center justify-between p-4 border-b">
-              <h3 className="text-lg font-semibold">
+          <div className="rounded-lg border border-slate-800 bg-slate-900/90 backdrop-blur-xl w-full max-w-4xl h-[80vh] flex flex-col shadow-xl">
+            <div className="flex items-center justify-between p-4 border-b border-slate-800/50">
+              <h3 className="text-lg font-semibold text-white">
                 Chat with {selectedLand.currentOwner?.fullName || "Seller"}
               </h3>
               <button
                 onClick={() => setShowChat(false)}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-slate-400 hover:text-white transition-colors"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -695,11 +695,11 @@ const LandCard: React.FC<LandCardProps> = ({
 
   return (
     <div
-      className="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow duration-200 overflow-hidden cursor-pointer"
+      className="rounded-lg border border-slate-800 bg-slate-900/60 backdrop-blur-xl shadow-sm hover:shadow-lg hover:shadow-emerald-500/10 transition-all duration-200 overflow-hidden cursor-pointer"
       onClick={handleCardClick}
     >
       {/* Image */}
-      <div className="relative h-48 bg-gray-200">
+      <div className="relative h-48 bg-slate-800">
         {!imageError && primaryImage ? (
           <img
             src={imageUrl}
@@ -708,8 +708,8 @@ const LandCard: React.FC<LandCardProps> = ({
             onError={() => setImageError(true)}
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gray-100">
-            <Camera className="w-12 h-12 text-gray-400" />
+          <div className="w-full h-full flex items-center justify-center bg-slate-800">
+            <Camera className="w-12 h-12 text-slate-600" />
           </div>
         )}
 
@@ -723,7 +723,7 @@ const LandCard: React.FC<LandCardProps> = ({
             aria-label={
               isFavorited ? "Remove from favorites" : "Add to favorites"
             }
-            className="absolute top-3 right-3 p-2 bg-white bg-opacity-80 rounded-full hover:bg-opacity-100 transition-all"
+            className="absolute top-3 right-3 p-2 bg-slate-900/80 backdrop-blur-sm rounded-full hover:bg-slate-900 transition-all"
           >
             {/* Use an inline SVG heart so we can control fill color without changing global styles */}
             <svg
@@ -751,7 +751,7 @@ const LandCard: React.FC<LandCardProps> = ({
 
         {/* Price Badge */}
         {land.marketInfo?.askingPrice && (
-          <div className="absolute bottom-3 left-3 bg-green-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+          <div className="absolute bottom-3 left-3 bg-emerald-500 text-slate-950 px-3 py-1 rounded-full text-sm font-semibold shadow-md shadow-emerald-500/40">
             {formatPrice(land.marketInfo.askingPrice)}
           </div>
         )}
@@ -760,7 +760,7 @@ const LandCard: React.FC<LandCardProps> = ({
       {/* Content */}
       <div className="p-4">
         {/* Location */}
-        <div className="flex items-center gap-1 text-gray-600 mb-2">
+        <div className="flex items-center gap-1 text-slate-400 mb-2">
           <MapPin className="w-4 h-4" />
           <span className="text-sm">
             {land.village}, {land.district}, {land.state}
@@ -768,16 +768,16 @@ const LandCard: React.FC<LandCardProps> = ({
         </div>
 
         {/* Title */}
-        <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
+        <h3 className="font-semibold text-white mb-2 line-clamp-2">
           {land.landType} Land - Survey No. {land.surveyNumber}
         </h3>
 
         {/* Area */}
-        <p className="text-gray-600 text-sm mb-3">{formatArea(land)}</p>
+        <p className="text-slate-400 text-sm mb-3">{formatArea(land)}</p>
 
         {/* Description */}
         {land.marketInfo?.description && (
-          <p className="text-gray-700 text-sm mb-3 line-clamp-2">
+          <p className="text-slate-300 text-sm mb-3 line-clamp-2">
             {land.marketInfo.description}
           </p>
         )}
@@ -785,15 +785,15 @@ const LandCard: React.FC<LandCardProps> = ({
         {/* Features */}
         {features.length > 0 && (
           <div className="mb-3">
-            <ul className="text-xs text-gray-600 space-y-1">
+            <ul className="text-xs text-slate-400 space-y-1">
               {features.slice(0, 3).map((feature, index) => (
                 <li key={index} className="flex items-center gap-1">
-                  <Star className="w-3 h-3 text-yellow-500" />
+                  <Star className="w-3 h-3 text-yellow-400" />
                   {feature}
                 </li>
               ))}
               {features.length > 3 && (
-                <li className="text-gray-500">
+                <li className="text-slate-500">
                   +{features.length - 3} more features
                 </li>
               )}
@@ -808,13 +808,13 @@ const LandCard: React.FC<LandCardProps> = ({
               {amenities.slice(0, 3).map((amenity, index) => (
                 <span
                   key={index}
-                  className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
+                  className="px-2 py-1 bg-emerald-500/20 text-emerald-300 text-xs rounded-full border border-emerald-500/30"
                 >
                   {amenity}
                 </span>
               ))}
               {amenities.length > 3 && (
-                <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                <span className="px-2 py-1 bg-slate-800/50 text-slate-400 text-xs rounded-full">
                   +{amenities.length - 3}
                 </span>
               )}
@@ -833,7 +833,7 @@ const LandCard: React.FC<LandCardProps> = ({
                     e.stopPropagation();
                     onEdit(land);
                   }}
-                  className="flex-1 flex items-center justify-center gap-2 py-2 px-4 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+                  className="flex-1 flex items-center justify-center gap-2 py-2 px-4 border border-emerald-500 text-emerald-300 rounded-lg hover:bg-emerald-500/10 transition-colors"
                 >
                   <Edit2 className="w-4 h-4" />
                   Edit
@@ -845,7 +845,7 @@ const LandCard: React.FC<LandCardProps> = ({
                     e.stopPropagation();
                     onRemove(land);
                   }}
-                  className="flex-1 flex items-center justify-center gap-2 py-2 px-4 border border-red-600 text-red-600 rounded-lg hover:bg-red-50 transition-colors"
+                  className="flex-1 flex items-center justify-center gap-2 py-2 px-4 border border-red-500 text-red-400 rounded-lg hover:bg-red-500/10 transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />
                   Remove
@@ -860,7 +860,7 @@ const LandCard: React.FC<LandCardProps> = ({
                   e.stopPropagation();
                   onChat();
                 }}
-                className="flex-1 flex items-center justify-center gap-2 py-2 px-4 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+                className="flex-1 flex items-center justify-center gap-2 py-2 px-4 border border-emerald-500 text-emerald-300 rounded-lg hover:bg-emerald-500/10 transition-colors"
               >
                 <MessageCircle className="w-4 h-4" />
                 Chat
@@ -880,7 +880,7 @@ const LandCard: React.FC<LandCardProps> = ({
         </div>
 
         {/* Additional Info */}
-        <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
+        <div className="mt-3 pt-3 border-t border-slate-800/50 flex items-center justify-between text-xs text-slate-500">
           <span>
             Listed{" "}
             {new Date(
