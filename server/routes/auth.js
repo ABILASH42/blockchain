@@ -193,6 +193,149 @@ router.post("/verify-and-register", async (req, res) => {
 });
 
 
+// Send OTP for password reset
+router.post("/send-password-reset-otp", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Validate email
+    if (!email) {
+      return res.status(400).json({
+        ok: false,
+        error: "Email is required",
+      });
+    }
+
+    // Check if user exists
+    const user = await User.findByEmail(email);
+    if (!user) {
+      return res.status(400).json({
+        ok: false,
+        error: "No account found with this email address",
+      });
+    }
+
+    // Create and send OTP
+    await createAndSendOTP(email, user.fullName, "PASSWORD_RESET");
+
+    res.json({
+      ok: true,
+      message: "Password reset code sent to your email",
+      expiresIn: 300, // 5 minutes in seconds
+    });
+  } catch (error) {
+    console.error("Send password reset OTP error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Failed to send password reset code. Please try again.",
+    });
+  }
+});
+
+// Verify password reset OTP
+router.post("/verify-reset-otp", async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    // Validate required fields
+    if (!email || !otp) {
+      return res.status(400).json({
+        ok: false,
+        error: "Email and OTP are required",
+      });
+    }
+
+    // Verify OTP
+    const otpResult = await verifyOTP(email, otp);
+    if (!otpResult.success) {
+      return res.status(400).json({
+        ok: false,
+        error: otpResult.error,
+      });
+    }
+
+    // Check if user exists
+    const user = await User.findByEmail(email);
+    if (!user) {
+      return res.status(400).json({
+        ok: false,
+        error: "User not found",
+      });
+    }
+
+    res.json({
+      ok: true,
+      message: "OTP verified successfully",
+    });
+  } catch (error) {
+    console.error("Verify reset OTP error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Server error during OTP verification",
+    });
+  }
+});
+
+// Reset password
+router.post("/reset-password", async (req, res) => {
+  try {
+    const { email, newPassword } = req.body;
+
+    // Validate required fields
+    if (!email || !newPassword) {
+      return res.status(400).json({
+        ok: false,
+        error: "Email and new password are required",
+      });
+    }
+
+    // Validate password length
+    if (newPassword.length < 6) {
+      return res.status(400).json({
+        ok: false,
+        error: "Password must be at least 6 characters long",
+      });
+    }
+
+    // Find user
+    const user = await User.findByEmail(email);
+    if (!user) {
+      return res.status(400).json({
+        ok: false,
+        error: "User not found",
+      });
+    }
+
+    // Update password (will be hashed by pre-save middleware)
+    user.password = newPassword;
+    await user.save();
+
+    // Log password reset
+    await AuditLog.logAction(
+      "PASSWORD_RESET",
+      user._id,
+      "USER",
+      user._id.toString(),
+      { email: user.email },
+      req
+    );
+
+    console.log(`Password reset successful for ${user.email}`);
+
+    res.json({
+      ok: true,
+      message: "Password reset successfully",
+    });
+  } catch (error) {
+    console.error("Password reset error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Server error during password reset. Please try again.",
+    });
+  }
+});
+
+
 // Register user
 router.post("/register", async (req, res) => {
   try {

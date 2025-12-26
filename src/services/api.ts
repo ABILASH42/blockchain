@@ -63,6 +63,27 @@ class ApiService {
     });
   }
 
+  async sendPasswordResetOTP(email: string) {
+    return this.request('/auth/send-password-reset-otp', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    });
+  }
+
+  async verifyResetOTP(email: string, otp: string) {
+    return this.request('/auth/verify-reset-otp', {
+      method: 'POST',
+      body: JSON.stringify({ email, otp }),
+    });
+  }
+
+  async resetPassword(email: string, newPassword: string) {
+    return this.request('/auth/reset-password', {
+      method: 'POST',
+      body: JSON.stringify({ email, newPassword }),
+    });
+  }
+
   async login(credentials: any) {
     return this.request('/auth/login', {
       method: 'POST',

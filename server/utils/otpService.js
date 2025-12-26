@@ -1,5 +1,5 @@
 const OTP = require("../models/OTP");
-const { sendOTPEmail } = require("./emailService");
+const { sendOTPEmail, sendPasswordResetEmail } = require("./emailService");
 
 // Generate 6-digit OTP
 const generateOTP = () => {
@@ -25,8 +25,12 @@ const createAndSendOTP = async (email, userName, purpose = "REGISTRATION") => {
     });
     await otpDoc.save();
 
-    // Send OTP via email
-    await sendOTPEmail(email, otp, userName);
+    // Send OTP via email (use appropriate template based on purpose)
+    if (purpose === "PASSWORD_RESET") {
+      await sendPasswordResetEmail(email, otp, userName);
+    } else {
+      await sendOTPEmail(email, otp, userName);
+    }
 
     console.log(`OTP created for ${email}, expires at ${expiresAt}`);
     return {

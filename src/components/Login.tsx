@@ -464,6 +464,17 @@ const Login: React.FC = () => {
                     {fieldErrors.password}
                   </p>
                 )}
+                {isLogin && (
+                  <div className="mt-2 text-right">
+                    <button
+                      type="button"
+                      onClick={() => window.location.href = '/forgot-password'}
+                      className="text-sm text-orange-400 hover:text-orange-300 font-medium"
+                    >
+                      Forgot password?
+                    </button>
+                  </div>
+                )}
               </div>
 
               {!isLogin && (

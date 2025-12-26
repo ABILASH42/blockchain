@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import Login from './components/Login';
+import ForgotPassword from './components/ForgotPassword';
 import Dashboard from './components/Dashboard';
 import LandDetailPage from './components/LandDetailPage';
 import Home from './pages/Home';
@@ -105,6 +106,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/marketplace-preview" element={<MarketplacePreview />} />
             <Route path="/login" element={<LoginRoute />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/dashboard" element={<AppContent />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
