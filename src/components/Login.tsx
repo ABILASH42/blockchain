@@ -243,8 +243,8 @@ const Login: React.FC = () => {
   return (
     <>
       <MinimalHeader />
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-950 to-slate-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 pt-24">
-        <div className="max-w-md w-full space-y-8 bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-2xl px-8 py-10 shadow-2xl shadow-slate-900/40">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 pt-24">
+        <div className="max-w-md w-full space-y-8 bg-slate-900/40 backdrop-blur-2xl border border-slate-700/50 rounded-3xl px-8 py-10 shadow-2xl shadow-emerald-500/10 ring-1 ring-slate-800/50">
         <div className="text-center">
           <div className="mx-auto h-12 w-12 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-2xl flex items-center justify-center shadow-md shadow-emerald-500/40">
             <User className="h-6 w-6 text-slate-950" />
@@ -464,17 +464,6 @@ const Login: React.FC = () => {
                     {fieldErrors.password}
                   </p>
                 )}
-                {isLogin && (
-                  <div className="mt-2 text-right">
-                    <button
-                      type="button"
-                      onClick={() => window.location.href = '/forgot-password'}
-                      className="text-sm text-orange-400 hover:text-orange-300 font-medium"
-                    >
-                      Forgot password?
-                    </button>
-                  </div>
-                )}
               </div>
 
               {!isLogin && (
@@ -545,11 +534,11 @@ const Login: React.FC = () => {
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-slate-700" />
+                  <div className="w-full border-t border-slate-700/50" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-slate-900 text-slate-400">
-                    Or
+                  <span className="px-3 py-1 bg-slate-900/80 backdrop-blur-sm text-slate-400 rounded-full border border-slate-700/30">
+                    Or continue with
                   </span>
                 </div>
               </div>
@@ -558,14 +547,14 @@ const Login: React.FC = () => {
                 type="button"
                 onClick={handleWalletConnect}
                 disabled={loading}
-                className="w-full flex justify-center items-center py-3 px-4 border border-slate-700 text-sm font-medium rounded-lg text-white bg-slate-800/50 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="group w-full flex justify-center items-center py-3.5 px-4 border border-emerald-500/30 text-sm font-semibold rounded-2xl text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 hover:border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg shadow-emerald-500/10"
               >
-                <Wallet className="h-4 w-4 mr-2" />
+                <Wallet className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
                 Connect with MetaMask
               </button>
             </div>
 
-            <div className="text-center">
+            <div className="text-center space-y-3">
               <button
                 type="button"
                 onClick={switchMode}
@@ -575,6 +564,17 @@ const Login: React.FC = () => {
                   ? "Don't have an account? Sign up"
                   : 'Already have an account? Sign in'}
               </button>
+              {isLogin && (
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => window.location.href = '/forgot-password'}
+                    className="text-sm text-slate-400 hover:text-emerald-300 font-medium transition-colors"
+                  >
+                    Forgot password?
+                  </button>
+                </div>
+              )}
             </div>
           </form>
         )}
