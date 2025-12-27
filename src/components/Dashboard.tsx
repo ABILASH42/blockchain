@@ -26,7 +26,6 @@ import { Chat } from "../types";
 import QRScanner from "./QRScanner";
 import TwoFactorAuth from "./TwoFactorAuth";
 import AuditorDashboard from "./AuditorDashboard";
-import AdminTransactionDashboard from "./AdminTransactionDashboard";
 import OnboardingChecklist from "./onboarding/OnboardingChecklist";
 import WelcomeBanner from "./onboarding/WelcomeBanner";
 
@@ -271,12 +270,16 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigateToLand, initialTab, ini
                     </div>
                   ) : (
                     <div>
-                      {chats.map((chat) => {
+                      {chats
+                        .filter((chat, index, self) => 
+                          index === self.findIndex((c) => c._id === chat._id)
+                        )
+                        .map((chat) => {
                         // Always show the other user (receiver), not the current user
                         
                         // Ensure proper string comparison for user IDs
                         const currentUserId = auth.user?.id;
-                        const buyerId = chat.buyer?.id || chat.buyer?.id;
+                        const buyerId = chat.buyer?.id;
                         const otherUser = buyerId === currentUserId ? chat.seller : chat.buyer;
                         const lastMessage = chat.messages && chat.messages.length > 0 ? chat.messages[chat.messages.length - 1] : null;
                         const isActive = selectedChat?._id === chat._id;
@@ -414,13 +417,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigateToLand, initialTab, ini
         return <UserProfile onNavigateToLand={onNavigateToLand} />;
       case "admin":
         return auth.user?.role === "ADMIN" ? (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h1 className="text-2xl font-semibold tracking-tight text-white">Admin Panel</h1>
-            </div>
-            <AdminTransactionDashboard />
-            <AdminPanel />
-          </div>
+          <AdminPanel />
         ) : null;
       case "auditor":
         return auth.user?.role === "AUDITOR" ? <AuditorDashboard /> : null;

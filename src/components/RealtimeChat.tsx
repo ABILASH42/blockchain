@@ -62,6 +62,7 @@ const RealtimeChat: React.FC<RealtimeChatProps> = ({
   const [twoFactorCode, setTwoFactorCode] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const loadingChatRef = useRef(false);
 
   // Auto-scroll to bottom when new messages arrive
   const scrollToBottom = () => {
@@ -202,7 +203,14 @@ const RealtimeChat: React.FC<RealtimeChatProps> = ({
   };
 
   const loadChat = async () => {
+    // Prevent duplicate calls
+    if (loadingChatRef.current) {
+      console.log('loadChat already in progress, skipping...');
+      return;
+    }
+    
     try {
+      loadingChatRef.current = true;
       setLoading(true);
       let chatData;
 
@@ -261,6 +269,7 @@ const RealtimeChat: React.FC<RealtimeChatProps> = ({
       setError(error.message || 'Failed to load chat');
     } finally {
       setLoading(false);
+      loadingChatRef.current = false;
     }
   };
 

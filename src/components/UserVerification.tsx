@@ -288,6 +288,7 @@ const UserVerification: React.FC = () => {
     );
   }
 
+  // Don't show form if verification is already verified
   if (auth.user?.verificationStatus === "VERIFIED") {
     return (
       <div className="space-y-6">
@@ -297,6 +298,23 @@ const UserVerification: React.FC = () => {
           </h1>
           <p className="mt-1 text-sm text-slate-400">
             Your account verification status
+          </p>
+        </div>
+        {getVerificationStatus()}
+      </div>
+    );
+  }
+
+  // Don't show form if verification is pending review
+  if (auth.user?.verificationStatus === "PENDING") {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight text-white">
+            Account Verification
+          </h1>
+          <p className="mt-1 text-sm text-slate-400">
+            Your verification documents are under review
           </p>
         </div>
         {getVerificationStatus()}
@@ -650,12 +668,8 @@ const UserVerification: React.FC = () => {
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                 Submitting...
               </div>
-            ) : auth.user?.verificationStatus === "PENDING" ? (
-              "Verification Pending"
             ) : auth.user?.verificationStatus === "REJECTED" ? (
               "Resubmit for Verification"
-            ) : auth.user?.verificationStatus === "NOT_SUBMITTED" ? (
-              "Submit for Verification"
             ) : (
               "Submit for Verification"
             )}

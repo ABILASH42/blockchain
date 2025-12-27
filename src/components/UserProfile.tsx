@@ -29,7 +29,7 @@ interface UserProfileProps {
 }
 
 const UserProfile: React.FC<UserProfileProps> = ({ onNavigateToLand }) => {
-  const { auth } = useAuth();
+  const { auth, refreshUser } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -291,10 +291,23 @@ const UserProfile: React.FC<UserProfileProps> = ({ onNavigateToLand }) => {
     try {
       setLoading(true);
       setError("");
-      // In a real implementation, this would save to the API
-      console.log("Saving profile:", formData);
+      
+      // Call the API to update the profile
+      const response = await apiService.updateProfile({
+        fullName: formData.fullName,
+        phoneNumber: formData.phoneNumber,
+        address: formData.address,
+      });
+      
+      console.log("Profile updated successfully:", response);
+      
+      // Refresh the user data in the auth context
+      await refreshUser();
+      
+      // Exit edit mode
       setIsEditing(false);
     } catch (error: any) {
+      console.error("Failed to save profile:", error);
       setError(error.message || "Failed to save profile");
     } finally {
       setLoading(false);

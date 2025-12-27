@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { CheckCircle, Circle, ArrowRight } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -9,6 +9,15 @@ interface OnboardingChecklistProps {
 
 const OnboardingChecklist: React.FC<OnboardingChecklistProps> = ({ onClose, onNavigate }) => {
   const { auth } = useAuth();
+  const [isHidden, setIsHidden] = useState(false);
+
+  // Check if onboarding was already completed
+  useEffect(() => {
+    const completed = localStorage.getItem('onboarding_completed');
+    if (completed === 'true') {
+      setIsHidden(true);
+    }
+  }, []);
 
   // Calculate checklist completion
   const tasks = [
@@ -54,6 +63,24 @@ const OnboardingChecklist: React.FC<OnboardingChecklistProps> = ({ onClose, onNa
   const completedTasks = tasks.filter(t => t.completed).length;
   const totalTasks = tasks.length;
   const progress = Math.round((completedTasks / totalTasks) * 100);
+
+  // Save completion state when all tasks are done
+  useEffect(() => {
+    if (progress === 100 && !isHidden) {
+      // Wait a moment to show the success message before hiding
+      const timer = setTimeout(() => {
+        localStorage.setItem('onboarding_completed', 'true');
+        setIsHidden(true);
+      }, 3000); // Hide after 3 seconds
+      
+      return () => clearTimeout(timer);
+    }
+  }, [progress, isHidden]);
+
+  // Don't render if onboarding is completed
+  if (isHidden) {
+    return null;
+  }
 
   return (
     <div className="rounded-lg border border-emerald-500/30 bg-gradient-to-br from-emerald-500/10 to-slate-900/60 backdrop-blur-xl p-6 shadow-lg">

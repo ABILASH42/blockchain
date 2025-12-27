@@ -353,10 +353,36 @@ router.put("/profile", auth, async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    // Initialize profile object if it doesn't exist
+    if (!user.profile) {
+      user.profile = {
+        phoneNumber: "",
+        address: {
+          street: "",
+          city: "",
+          state: "",
+          zipCode: "",
+          country: "India"
+        }
+      };
+    }
+
     // Update allowed fields
     if (fullName) user.fullName = fullName.trim();
-    if (phoneNumber) user.profile.phoneNumber = phoneNumber.trim();
+    if (phoneNumber !== undefined) {
+      user.profile.phoneNumber = phoneNumber.trim();
+    }
     if (address) {
+      // Initialize address object if it doesn't exist
+      if (!user.profile.address) {
+        user.profile.address = {
+          street: "",
+          city: "",
+          state: "",
+          zipCode: "",
+          country: "India"
+        };
+      }
       user.profile.address = {
         ...user.profile.address,
         ...address,
@@ -373,7 +399,10 @@ router.put("/profile", auth, async (req, res) => {
     });
   } catch (error) {
     console.error("Update profile error:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ 
+      message: "Server error",
+      error: process.env.NODE_ENV === "development" ? error.message : undefined
+    });
   }
 });
 

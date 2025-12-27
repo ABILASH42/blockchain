@@ -1893,6 +1893,196 @@ router.get("/:landId/details", async (req, res) => {
   }
 });
 
+// Download ownership document (digitized certificate)
+router.get("/:landId/download-document", auth, async (req, res) => {
+  try {
+    const { landId } = req.params;
+    console.log(`Digitized document download request for landId: ${landId}`);
+
+    if (!mongoose.Types.ObjectId.isValid(landId)) {
+      console.error(`Invalid landId format: ${landId}`);
+      return res.status(400).json({
+        success: false,
+        error: "Invalid landId format",
+      });
+    }
+
+    const land = await Land.findById(landId);
+    if (!land) {
+      console.error(`Land not found: ${landId}`);
+      return res.status(404).json({
+        success: false,
+        error: "Land not found",
+      });
+    }
+
+    // Check if user is the current owner
+    if (land.currentOwner.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "You can only download documents for lands you own",
+      });
+    }
+
+    if (!land.digitalDocument || !land.digitalDocument.isDigitalized) {
+      console.error(`Land not digitalized: ${landId}`);
+      return res.status(400).json({
+        success: false,
+        error: "Land is not digitalized. Please contact an administrator to digitalize this land first.",
+      });
+    }
+
+    if (!land.digitalDocument.hash) {
+      console.error(`No digital document hash found for land: ${landId}`);
+      return res.status(404).json({
+        success: false,
+        error: "Digital certificate hash not found",
+      });
+    }
+
+    console.log(
+      `Attempting to download digitized document for land: ${land.assetId}, hash: ${land.digitalDocument.hash}`
+    );
+
+    // Fetch the PDF from IPFS
+    const pdfBuffer = await ipfsService.downloadFile(land.digitalDocument.hash);
+
+    if (!pdfBuffer || pdfBuffer.length === 0) {
+      console.error(`Empty or null PDF buffer for land: ${landId}`);
+      return res.status(404).json({
+        success: false,
+        error: "Certificate file not found or is empty",
+      });
+    }
+
+    console.log(
+      `Successfully retrieved digitized document for land: ${land.assetId}, size: ${pdfBuffer.length} bytes`
+    );
+
+    // Set proper headers for PDF download
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="land_document_${land.assetId}.pdf"`
+    );
+    res.setHeader("Content-Length", pdfBuffer.length);
+    res.setHeader("Cache-Control", "no-cache");
+
+    // Send the PDF buffer
+    res.send(pdfBuffer);
+  } catch (error) {
+    console.error("Download digitized document error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to download digitized document",
+      error: error.message,
+    });
+  }
+});
+
+// Download original document  
+router.get("/:landId/download-original-document", auth, async (req, res) => {
+  try {
+    const { landId } = req.params;
+    console.log(`Original document download request for landId: ${landId}`);
+
+    if (!mongoose.Types.ObjectId.isValid(landId)) {
+      console.error(`Invalid landId format: ${landId}`);
+      return res.status(400).json({
+        success: false,
+        error: "Invalid landId format",
+      });
+    }
+
+    const land = await Land.findById(landId);
+    if (!land) {
+      console.error(`Land not found: ${landId}`);
+      return res.status(404).json({
+        success: false,
+        error: "Land not found",
+      });
+    }
+
+    // Check if user is the current owner
+    if (land.currentOwner.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "You can only download documents for lands you own",
+      });
+    }
+
+    if (!land.originalDocument || !land.originalDocument.hash) {
+      console.error(`No original document found for land: ${landId}`);
+      return res.status(404).json({
+        success: false,
+        error: "Original document not found for this land",
+      });
+    }
+
+    if (!land.originalDocument.filename) {
+      console.error(
+        `No filename found for original document of land: ${landId}`
+      );
+      return res.status(404).json({
+        success: false,
+        error: "Original document filename not found",
+      });
+    }
+
+    console.log(
+      `Attempting to download original document for land: ${land.assetId}, hash: ${land.originalDocument.hash}`
+    );
+
+    // Fetch the file from IPFS
+    const fileBuffer = await ipfsService.downloadFile(
+      land.originalDocument.hash
+    );
+
+    if (!fileBuffer || fileBuffer.length === 0) {
+      console.error(`Empty or null file buffer for land: ${landId}`);
+      return res.status(404).json({
+        success: false,
+        error: "Document file not found or is empty",
+      });
+    }
+
+    console.log(
+      `Successfully retrieved original document for land: ${land.assetId}, size: ${fileBuffer.length} bytes`
+    );
+
+    // Detect file type from filename
+    const mime = require("mime-types");
+    const path = require("path");
+
+    const originalFilename = land.originalDocument.filename;
+    const ext = path.extname(originalFilename).toLowerCase();
+    const mimeType =
+      mime.lookup(originalFilename) || "application/octet-stream";
+
+    // Generate download filename
+    const downloadFilename = `land-document-${land.assetId}${ext}`;
+
+    // Set proper headers for file download
+    res.setHeader("Content-Type", mimeType);
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${downloadFilename}"`
+    );
+    res.setHeader("Content-Length", fileBuffer.length);
+    res.setHeader("Cache-Control", "no-cache");
+
+    // Send the file buffer
+    res.send(fileBuffer);
+  } catch (error) {
+    console.error("Download original document error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to download original document",
+      error: error.message,
+    });
+  }
+});
+
 // Fix: Add a catch-all route at the end to return JSON for unknown API endpoints
 router.use((req, res, next) => {
   if (req.originalUrl.startsWith("/api/")) {
@@ -1903,128 +2093,6 @@ router.use((req, res, next) => {
   next();
 });
 
-// Download ownership document
-router.get("/:landId/download-document", auth, async (req, res) => {
-  try {
-    const { landId } = req.params;
 
-    const land = await Land.findById(landId);
-    if (!land) {
-      return res.status(404).json({ message: "Land not found" });
-    }
-
-    // Check if user is the current owner
-    if (land.currentOwner.toString() !== req.user._id.toString()) {
-      return res
-        .status(403)
-        .json({ message: "You can only download documents for lands you own" });
-    }
-
-    if (!land.digitalDocument) {
-      return res
-        .status(404)
-        .json({ message: "No digital document available for this land" });
-    }
-
-    // Check if the document file exists
-    const filename = land.digitalDocument.hash + ".pdf";
-    const filePath = path.join(__dirname, "..", "uploads", filename);
-
-    if (!fs.existsSync(filePath)) {
-      return res.status(404).json({
-        message: "Document file not found on server",
-        document: {
-          url: land.digitalDocument.url,
-          hash: land.digitalDocument.hash,
-          generatedAt: land.digitalDocument.generatedAt,
-          verifiedBy: land.digitalDocument.verifiedBy,
-        },
-      });
-    }
-
-    // Set headers for PDF download
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename="land_document_${land.assetId}.pdf"`
-    );
-
-    // Stream the file
-    const fileStream = fs.createReadStream(filePath);
-    fileStream.pipe(res);
-
-    fileStream.on("error", (error) => {
-      console.error("Error streaming document:", error);
-      if (!res.headersSent) {
-        res.status(500).json({ message: "Error serving document" });
-      }
-    });
-  } catch (error) {
-    console.error("Download document error:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-// Download original document
-router.get("/:landId/download-original-document", auth, async (req, res) => {
-  try {
-    const { landId } = req.params;
-
-    const land = await Land.findById(landId);
-    if (!land) {
-      return res.status(404).json({ message: "Land not found" });
-    }
-
-    // Check if user is the current owner
-    if (land.currentOwner.toString() !== req.user._id.toString()) {
-      return res
-        .status(403)
-        .json({ message: "You can only download documents for lands you own" });
-    }
-
-    if (!land.originalDocument) {
-      return res
-        .status(404)
-        .json({ message: "No original document available for this land" });
-    }
-
-    // Check if the document file exists
-    const filename = land.originalDocument.hash + ".pdf";
-    const filePath = path.join(__dirname, "..", "uploads", filename);
-
-    if (!fs.existsSync(filePath)) {
-      return res.status(404).json({
-        message: "Original document file not found on server",
-        document: {
-          url: land.originalDocument.url,
-          hash: land.originalDocument.hash,
-          uploadedAt: land.originalDocument.uploadedAt,
-          uploadedBy: land.originalDocument.uploadedBy,
-        },
-      });
-    }
-
-    // Set headers for PDF download
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename="original_document_${land.assetId}.pdf"`
-    );
-
-    // Stream the file
-    const fileStream = fs.createReadStream(filePath);
-    fileStream.pipe(res);
-
-    fileStream.on("error", (error) => {
-      console.error("Error streaming original document:", error);
-      if (!res.headersSent) {
-        res.status(500).json({ message: "Error serving original document" });
-      }
-    });
-  } catch (error) {
-    console.error("Download original document error:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
 
 module.exports = router;

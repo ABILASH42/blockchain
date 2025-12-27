@@ -378,19 +378,19 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                   required
                   value={formData.state}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-slate-700 bg-slate-800/60 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-900 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent hover:bg-slate-800 transition-colors cursor-pointer"
                 >
-                  <option value="">Select State</option>
-                  <option value="Karnataka">Karnataka</option>
-                  <option value="Maharashtra">Maharashtra</option>
-                  <option value="Tamil Nadu">Tamil Nadu</option>
-                  <option value="Gujarat">Gujarat</option>
-                  <option value="Rajasthan">Rajasthan</option>
-                  <option value="Uttar Pradesh">Uttar Pradesh</option>
-                  <option value="West Bengal">West Bengal</option>
-                  <option value="Andhra Pradesh">Andhra Pradesh</option>
-                  <option value="Telangana">Telangana</option>
-                  <option value="Kerala">Kerala</option>
+                  <option value="" className="bg-slate-900 text-slate-400">Select State</option>
+                  <option value="Karnataka" className="bg-slate-900 text-white hover:bg-slate-800">Karnataka</option>
+                  <option value="Maharashtra" className="bg-slate-900 text-white hover:bg-slate-800">Maharashtra</option>
+                  <option value="Tamil Nadu" className="bg-slate-900 text-white hover:bg-slate-800">Tamil Nadu</option>
+                  <option value="Gujarat" className="bg-slate-900 text-white hover:bg-slate-800">Gujarat</option>
+                  <option value="Rajasthan" className="bg-slate-900 text-white hover:bg-slate-800">Rajasthan</option>
+                  <option value="Uttar Pradesh" className="bg-slate-900 text-white hover:bg-slate-800">Uttar Pradesh</option>
+                  <option value="West Bengal" className="bg-slate-900 text-white hover:bg-slate-800">West Bengal</option>
+                  <option value="Andhra Pradesh" className="bg-slate-900 text-white hover:bg-slate-800">Andhra Pradesh</option>
+                  <option value="Telangana" className="bg-slate-900 text-white hover:bg-slate-800">Telangana</option>
+                  <option value="Kerala" className="bg-slate-900 text-white hover:bg-slate-800">Kerala</option>
                 </select>
               </div>
 
@@ -461,14 +461,14 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                   required
                   value={formData.landType}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-slate-700 bg-slate-800/60 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-900 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent hover:bg-slate-800 transition-colors cursor-pointer"
                 >
-                  <option value="">Select Type</option>
-                  <option value="AGRICULTURAL">Agricultural</option>
-                  <option value="RESIDENTIAL">Residential</option>
-                  <option value="COMMERCIAL">Commercial</option>
-                  <option value="INDUSTRIAL">Industrial</option>
-                  <option value="GOVERNMENT">Government</option>
+                  <option value="" className="bg-slate-900 text-slate-400">Select Type</option>
+                  <option value="AGRICULTURAL" className="bg-slate-900 text-white hover:bg-slate-800">Agricultural</option>
+                  <option value="RESIDENTIAL" className="bg-slate-900 text-white hover:bg-slate-800">Residential</option>
+                  <option value="COMMERCIAL" className="bg-slate-900 text-white hover:bg-slate-800">Commercial</option>
+                  <option value="INDUSTRIAL" className="bg-slate-900 text-white hover:bg-slate-800">Industrial</option>
+                  <option value="GOVERNMENT" className="bg-slate-900 text-white hover:bg-slate-800">Government</option>
                 </select>
               </div>
 
@@ -480,14 +480,14 @@ const AddLandForm: React.FC<AddLandFormProps> = ({ onClose, onSuccess }) => {
                   name="classification"
                   value={formData.classification}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-slate-700 bg-slate-800/60 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500"
+                  className="w-full px-3 py-2 border border-slate-700 bg-slate-900 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent hover:bg-slate-800 transition-colors cursor-pointer"
                 >
-                  <option value="">Select Classification</option>
-                  <option value="DRY">Dry</option>
-                  <option value="WET">Wet</option>
-                  <option value="GARDEN">Garden</option>
-                  <option value="INAM">Inam</option>
-                  <option value="SARKAR">Sarkar</option>
+                  <option value="" className="bg-slate-900 text-slate-400">Select Classification</option>
+                  <option value="DRY" className="bg-slate-900 text-white hover:bg-slate-800">Dry</option>
+                  <option value="WET" className="bg-slate-900 text-white hover:bg-slate-800">Wet</option>
+                  <option value="GARDEN" className="bg-slate-900 text-white hover:bg-slate-800">Garden</option>
+                  <option value="INAM" className="bg-slate-900 text-white hover:bg-slate-800">Inam</option>
+                  <option value="SARKAR" className="bg-slate-900 text-white hover:bg-slate-800">Sarkar</option>
                 </select>
               </div>
 

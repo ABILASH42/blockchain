@@ -34,10 +34,14 @@ class IPFSService {
         fs.mkdirSync(uploadsDir, { recursive: true });
       }
 
-      fs.writeFileSync(path.join(uploadsDir, hash), fileBuffer);
+      // Extract file extension from original filename and append to hash
+      const ext = path.extname(originalName).toLowerCase();
+      const hashWithExt = ext ? `${hash}${ext}` : hash;
 
-      console.log(`File uploaded to IPFS with hash: ${hash}`);
-      return hash;
+      fs.writeFileSync(path.join(uploadsDir, hashWithExt), fileBuffer);
+
+      console.log(`File uploaded to IPFS with hash: ${hashWithExt}`);
+      return hashWithExt;
     } catch (error) {
       console.error('Error uploading to IPFS:', error);
       throw error;

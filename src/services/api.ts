@@ -103,6 +103,14 @@ class ApiService {
     return response.user; // Extract user from the response object
   }
 
+  async updateProfile(profileData: { fullName?: string; phoneNumber?: string; address?: any }) {
+    return this.request('/users/profile', {
+      method: 'PUT',
+      body: JSON.stringify(profileData),
+    });
+  }
+
+
   // ==================== PROPERTIES ====================
   async getProperties(params: any = {}) {
     const queryString = new URLSearchParams(params).toString();
