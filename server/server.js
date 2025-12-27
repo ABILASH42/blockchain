@@ -172,6 +172,7 @@ app.use("/api/audit", require("./routes/audit"));
 app.use("/api/2fa", require("./routes/twoFactorRoutes"));
 app.use("/api/buy-requests", require("./routes/buyRequests"));
 app.use("/api/admin/transactions", require("./routes/adminTransactions"));
+app.use("/api/chatbot", require("./routes/chatbotRoutes"));
 
 // Serve PDF documents
 app.get("/api/documents/:filename", (req, res) => {
@@ -274,6 +275,7 @@ app.use("*", (req, res) => {
       "/api/admin/transactions",
       "/api/2fa",
       "/api/audit",
+      "/api/chatbot",
       "/api/health",
     ],
   });
