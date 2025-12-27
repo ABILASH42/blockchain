@@ -5,15 +5,16 @@ import {
   Calendar, 
   Eye, 
   Heart, 
-  MessageCircle, 
-  ShoppingCart,
+  MessageCircle,
   Camera,
   Star,
   User,
   Shield,
   Edit2,
-  Trash2
+  Trash2,
+  Share2
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Land } from '../types';
 import { useAuth } from '../hooks/useAuth';
 import apiService from '../services/api';
@@ -25,6 +26,18 @@ interface LandDetailPageProps {
   onBack?: (tab?: string, landId?: string, sellerId?: string) => void;
   onNavigateToChat?: (landId: string, sellerId: string, isFirstChat?: boolean) => void;
 }
+
+const DetailCard: React.FC<{ children: React.ReactNode; className?: string; delay?: number }> = ({ children, className = "", delay = 0 }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5, delay }}
+    whileHover={{ y: -5, boxShadow: "0 20px 25px -5px rgba(16, 185, 129, 0.1), 0 10px 10px -5px rgba(16, 185, 129, 0.04)" }}
+    className={`bg-slate-900/60 backdrop-blur-xl rounded-xl shadow-lg border border-slate-800 p-6 hover:border-emerald-500/30 transition-colors duration-300 ${className}`}
+  >
+    {children}
+  </motion.div>
+);
 
 const LandDetailPage: React.FC<LandDetailPageProps> = ({ landId, onBack, onNavigateToChat }) => {
   const { auth } = useAuth();
@@ -79,10 +92,7 @@ const LandDetailPage: React.FC<LandDetailPageProps> = ({ landId, onBack, onNavig
     }
   };
 
-  const handleBuyNow = () => {
-    // Navigate to purchase flow
-    console.log('Buy now clicked');
-  };
+
 
   const handleEdit = () => {
     setShowEditForm(true);
@@ -164,20 +174,33 @@ const LandDetailPage: React.FC<LandDetailPageProps> = ({ landId, onBack, onNavig
     <div className="bg-slate-950 min-h-screen">
       <div className="max-w-6xl mx-auto px-4 py-6">
       {/* Header */}
-      <div className="flex items-center gap-4 mb-6">
-        <button
-          onClick={() => onBack && onBack()}
-          className="p-2 hover:bg-slate-800 rounded-lg transition-colors text-white"
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="flex items-center gap-4 mb-6"
         >
-          <ArrowLeft className="w-6 h-6" />
-        </button>
-        <h1 className="text-2xl font-bold text-white">Land Details</h1>
-      </div>
+          <button
+            onClick={() => onBack && onBack()}
+            className="p-2 hover:bg-slate-800 rounded-lg transition-colors text-white group"
+          >
+            <ArrowLeft className="w-6 h-6 group-hover:-translate-x-1 transition-transform" />
+          </button>
+          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">Land Details</h1>
+        </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Image Gallery */}
-        <div className="lg:col-span-2">
-          <div className="bg-slate-900/60 backdrop-blur-xl rounded-xl shadow-lg border border-slate-800 overflow-hidden">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="lg:col-span-2"
+        >
+          <motion.div 
+            whileHover={{ scale: 1.01 }}
+            transition={{ duration: 0.3 }}
+            className="bg-slate-900/60 backdrop-blur-xl rounded-xl shadow-lg border border-slate-800 overflow-hidden relative group"
+          >
             {/* Main Image */}
             <div className="relative h-96 bg-gradient-to-br from-slate-800 to-slate-900">
               {currentImage ? (
@@ -243,13 +266,14 @@ const LandDetailPage: React.FC<LandDetailPageProps> = ({ landId, onBack, onNavig
                 </div>
               </div>
             )}
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Details Sidebar */}
         <div className="space-y-6">
           {/* Actions */}
-          <div className="bg-slate-900/60 backdrop-blur-xl rounded-xl shadow-lg border border-slate-800 p-6">
+          <DetailCard delay={0.2} className="relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
 
             {isOwner ? (
               // Owner actions
@@ -283,13 +307,7 @@ const LandDetailPage: React.FC<LandDetailPageProps> = ({ landId, onBack, onNavig
                   <MessageCircle className="w-5 h-5" />
                   Chat with Seller
                 </button>
-                <button
-                  onClick={handleBuyNow}
-                  className="w-full flex items-center justify-center gap-2 py-3 px-4 border border-emerald-500/50 text-emerald-300 rounded-lg hover:bg-emerald-500/10 hover:border-emerald-500 transition-all font-medium"
-                >
-                  <ShoppingCart className="w-5 h-5" />
-                  Buy Now
-                </button>
+
                 <button
                   onClick={handleLike}
                   className={`w-full flex items-center justify-center gap-2 py-3 px-4 border rounded-lg transition-all font-medium ${
@@ -303,10 +321,10 @@ const LandDetailPage: React.FC<LandDetailPageProps> = ({ landId, onBack, onNavig
                 </button>
               </div>
             )}
-          </div>
+          </DetailCard>
 
           {/* Owner Info */}
-          <div className="bg-slate-900/60 backdrop-blur-xl rounded-xl shadow-lg border border-slate-800 p-6">
+          <DetailCard delay={0.3}>
             <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
               <User className="w-5 h-5 text-emerald-400" />
               Owner Information
@@ -321,7 +339,7 @@ const LandDetailPage: React.FC<LandDetailPageProps> = ({ landId, onBack, onNavig
                 </span>
               </div>
             </div>
-          </div>
+          </DetailCard>
         </div>
       </div>
 
@@ -330,7 +348,7 @@ const LandDetailPage: React.FC<LandDetailPageProps> = ({ landId, onBack, onNavig
         {/* Left Column - Main Details */}
         <div className="lg:col-span-2 space-y-6">
           {/* Basic Information */}
-          <div className="bg-slate-900/60 backdrop-blur-xl rounded-xl shadow-lg border border-slate-800 p-6">
+          <DetailCard delay={0.4}>
             <h3 className="text-xl font-semibold text-white mb-4">Basic Information</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -350,10 +368,10 @@ const LandDetailPage: React.FC<LandDetailPageProps> = ({ landId, onBack, onNavig
                 <p className="text-white font-mono text-sm">{land.assetId}</p>
               </div>
             </div>
-          </div>
+          </DetailCard>
 
           {/* Location */}
-          <div className="bg-slate-900/60 backdrop-blur-xl rounded-xl shadow-lg border border-slate-800 p-6">
+          <DetailCard delay={0.5}>
             <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
               <MapPin className="w-5 h-5 text-emerald-400" />
               Location
@@ -363,19 +381,19 @@ const LandDetailPage: React.FC<LandDetailPageProps> = ({ landId, onBack, onNavig
               <p className="text-white">{land.taluka}, {land.district}</p>
               <p className="text-white">{land.state} - {land.pincode}</p>
             </div>
-          </div>
+          </DetailCard>
 
           {/* Description */}
           {land.marketInfo?.description && (
-            <div className="bg-slate-900/60 backdrop-blur-xl rounded-xl shadow-lg border border-slate-800 p-6">
+            <DetailCard delay={0.6}>
               <h3 className="text-xl font-semibold text-white mb-4">Description</h3>
               <p className="text-slate-300 leading-relaxed">{land.marketInfo.description}</p>
-            </div>
+            </DetailCard>
           )}
 
           {/* Features */}
           {land.marketInfo?.features && land.marketInfo.features.length > 0 && (
-            <div className="bg-slate-900/60 backdrop-blur-xl rounded-xl shadow-lg border border-slate-800 p-6">
+            <DetailCard delay={0.7}>
               <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
                 <Star className="w-5 h-5 text-emerald-400" />
                 Features
@@ -390,12 +408,12 @@ const LandDetailPage: React.FC<LandDetailPageProps> = ({ landId, onBack, onNavig
                   </span>
                 ))}
               </div>
-            </div>
+            </DetailCard>
           )}
 
           {/* Nearby Amenities */}
           {land.marketInfo?.nearbyAmenities && land.marketInfo.nearbyAmenities.length > 0 && (
-            <div className="bg-slate-900/60 backdrop-blur-xl rounded-xl shadow-lg border border-slate-800 p-6">
+            <DetailCard delay={0.8}>
               <h3 className="text-xl font-semibold text-white mb-4">Nearby Amenities</h3>
               <div className="flex flex-wrap gap-2">
                 {land.marketInfo.nearbyAmenities.map((amenity, index) => (
@@ -407,14 +425,14 @@ const LandDetailPage: React.FC<LandDetailPageProps> = ({ landId, onBack, onNavig
                   </span>
                 ))}
               </div>
-            </div>
+            </DetailCard>
           )}
         </div>
 
         {/* Right Column - Additional Info */}
         <div className="space-y-6">
           {/* Property Details */}
-          <div className="bg-slate-900/60 backdrop-blur-xl rounded-xl shadow-lg border border-slate-800 p-6">
+          <DetailCard delay={0.4}>
             <h3 className="font-semibold text-white mb-4">Property Details</h3>
             <div className="space-y-3">
               <div className="flex justify-between">
@@ -434,10 +452,10 @@ const LandDetailPage: React.FC<LandDetailPageProps> = ({ landId, onBack, onNavig
                 <span className="text-white">{land.verificationStatus}</span>
               </div>
             </div>
-          </div>
+          </DetailCard>
 
           {/* Listing Information */}
-          <div className="bg-slate-900/60 backdrop-blur-xl rounded-xl shadow-lg border border-slate-800 p-6">
+          <DetailCard delay={0.5}>
             <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
               <Calendar className="w-5 h-5 text-emerald-400" />
               Listing Information
@@ -452,19 +470,12 @@ const LandDetailPage: React.FC<LandDetailPageProps> = ({ landId, onBack, onNavig
                   }
                 </span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Views</span>
-                <span className="text-white flex items-center gap-1">
-                  <Eye className="w-4 h-4 text-emerald-400" />
-                  {Math.floor(Math.random() * 100) + 10}
-                </span>
-              </div>
             </div>
-          </div>
+          </DetailCard>
 
           {/* Virtual Tour */}
           {land.marketInfo?.virtualTourUrl && (
-            <div className="bg-slate-900/60 backdrop-blur-xl rounded-xl shadow-lg border border-slate-800 p-6">
+            <DetailCard delay={0.6}>
               <h3 className="font-semibold text-white mb-4">Virtual Tour</h3>
               <a
                 href={land.marketInfo?.virtualTourUrl}
@@ -475,7 +486,7 @@ const LandDetailPage: React.FC<LandDetailPageProps> = ({ landId, onBack, onNavig
                 <Eye className="w-4 h-4" />
                 View Virtual Tour
               </a>
-            </div>
+            </DetailCard>
           )}
         </div>
       </div>
