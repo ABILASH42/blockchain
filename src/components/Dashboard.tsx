@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from "react";
 import {
-  Plus,
-  Search,
-  Filter,
   Shield,
-  Map,
   QrCode,
-  BarChart3,
   CheckCircle,
-  X,
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
-import { Land } from "../types";
 import apiService from "../services/api";
 import Navbar from "./Navbar";
 import TransactionHistory from "./TransactionHistory";
@@ -19,7 +12,6 @@ import AdminPanel from "./AdminPanel";
 import UserProfile from "./UserProfile";
 import UserVerification from "./UserVerification";
 import LandDatabase from "./LandDatabase";
-import Marketplace from "./Marketplace";
 import LandMarketplace from "./LandMarketplace";
 import RealtimeChat from "./RealtimeChat";
 import { Chat } from "../types";
@@ -43,7 +35,6 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigateToLand, initialTab, ini
     initialTab || (auth.user?.role === "ADMIN" ? "land-database" : "marketplace")
   );
   const [showQRScanner, setShowQRScanner] = useState(false);
-  const [verificationResult, setVerificationResult] = useState<any>(null);
   const [error, setError] = useState("");
   const [chats, setChats] = useState<Chat[]>([]);
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
@@ -179,15 +170,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigateToLand, initialTab, ini
   };
 
 
-  const handleQRScan = async (assetId: string) => {
-    try {
-      setShowQRScanner(false);
-      const response = await apiService.verifyLandByAssetId(assetId);
-      setVerificationResult(response.verification);
-    } catch (error: any) {
-      setError(error.message || "Failed to verify land");
-    }
-  };
+
 
   const renderContent = () => {
     switch (activeTab) {
@@ -447,8 +430,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigateToLand, initialTab, ini
             </div>
 
             {/* How It Works Section */}
-            {!verificationResult && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* How It Works */}
                 <div className="rounded-lg border border-slate-800 bg-slate-900/60 backdrop-blur-xl shadow-sm p-6">
                   <h2 className="text-lg font-semibold text-white mb-4 flex items-center">
@@ -534,51 +516,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigateToLand, initialTab, ini
                   </div>
                 </div>
               </div>
-            )}
-
-            {verificationResult && (
-              <div className="rounded-lg border border-slate-800 bg-slate-900/60 backdrop-blur-xl shadow-sm p-6">
-                <h2 className="text-lg font-semibold text-white mb-4">
-                  Verification Result
-                </h2>
-                {verificationResult.isValid ? (
-                  <div className="space-y-3">
-                    <div className="flex items-center text-emerald-300">
-                      <CheckCircle className="h-5 w-5 mr-2" />
-                      <span className="font-medium">
-                        Valid Land Certificate
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4 text-sm text-slate-300">
-                      <div>
-                        <strong className="text-white">Asset ID:</strong> {verificationResult.assetId}
-                      </div>
-                      <div>
-                        <strong className="text-white">Owner:</strong>{" "}
-                        {verificationResult.currentOwner?.fullName}
-                      </div>
-                      <div>
-                        <strong className="text-white">Location:</strong>{" "}
-                        {verificationResult.landDetails.village},{" "}
-                        {verificationResult.landDetails.district}
-                      </div>
-                      <div>
-                        <strong className="text-white">Area:</strong>{" "}
-                        {verificationResult.landDetails.area.acres} Acres
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex items-center text-red-400">
-                    <X className="h-5 w-5 mr-2" />
-                    <span className="font-medium">
-                      Invalid or Unverified Certificate
-                    </span>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
+            </div>
         );
       default:
         return null;
@@ -597,7 +535,6 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigateToLand, initialTab, ini
 
       {showQRScanner && (
         <QRScanner
-          onScan={handleQRScan}
           onClose={() => setShowQRScanner(false)}
         />
       )}
